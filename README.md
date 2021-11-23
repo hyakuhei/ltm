@@ -31,7 +31,7 @@ An online book review site. Unauthenticated users can list books and read review
 | IN | Single Word | Tells an entity that it is within a Boundary. |
 | EXEC | Everything after | Tells an entity to perform an instruction, often used for notes about important computation |
 | USE | Single Word | <Optional> can be used with SEND to describe which transport to use |
-| SCENE | Everything after | descrbie a new scene, optionally ending the scene previous |
+| SCENE | Everything after | describe a new scene, optionally ending the scene previous |
 
  
 
@@ -49,8 +49,8 @@ ACTOR Nginx // Create an actor called Nginx
 ACTOR DB
 TRANSPORT TLS // Create a transport called TLS (later this will be a built-in)
 DATA GetRequest
-User SEND Nginx GetRequest use TLS
-Nginx 
+User SEND Nginx GetRequest USE TLS
+DATA AllBookQuery
 
 
   
