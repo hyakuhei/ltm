@@ -31,19 +31,28 @@ An online book review site. Unauthenticated users can list books and read review
 | IN | Single Word | Tells an entity that it is within a Boundary. |
 | EXEC | Everything after | Tells an entity to perform an instruction, often used for notes about important computation |
 | USE | Single Word | <Optional> can be used with SEND to describe which transport to use |
-| SCENE | Everything after | descrbie a new scene, optionally ending the scene previous
+| SCENE | Everything after | descrbie a new scene, optionally ending the scene previous |
+
+ 
 
 ltm reads like a recipie book from the 1920's statements are instructions of what to do.
 
 ### Example
 In version 0.1 the goal is to build a very simple language, with no shortcuts or convienence features.
 
+Note the first scene will often define a lot of entities, as the first scene is a blank slate. Entities are "global" in scope, so once declared in one scene they can be used in others
+
 ``` 
+SCENE User views list of current reviews
 ACTOR User // Create an actor called User
 ACTOR Nginx // Create an actor called Nginx
 ACTOR DB
-DATA Credentials // Credentials exists as an entity that can be moved around
 TRANSPORT TLS // Create a transport called TLS (later this will be a built-in)
+DATA GetRequest
+User SEND Nginx GetRequest use TLS
+Nginx 
+
+
   
  
 
@@ -52,4 +61,6 @@ TRANSPORT TLS // Create a transport called TLS (later this will be a built-in)
 ## Version 0.2
 Introduces 
 IS - to set properties
+HTTP-REQUEST - to make a specific HTTP request
+
 
