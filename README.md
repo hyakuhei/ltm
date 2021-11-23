@@ -16,7 +16,7 @@ Newlines separate statements, one statement per line, no line length limits
 Actors, data, transports, boundaries, are all created and manipulated using Keywords - Keywords in ltm are always capitalized.
 Any keyword created variable exists within a global context.
 
-
+## Version 0.1
 | Keyword | Parameter | Meaning | 
 | ------- | --------| --- |
 | //      | Everything after | a comment, everything after // is ignored |
@@ -27,10 +27,19 @@ Any keyword created variable exists within a global context.
 | SEND | Acts on Actor to Left and Right of SEND | An instruction to send some data, from an actor, to an actor, possibly using a specific transport |
 | IN | Single Word | Tells an entity that it is within a Boundary. |
 | EXEC | Everything after | Tells an entity to perform an instruction, often used for notes about important computation |
-
+| USE | Single Word | <Optional> can be used with SEND to describe which transport to use |
 
 ltm reads like a recipie book from the 1920's statements are instructions of what to do.
 
-```
+### Example
+In version 0.1 the goal is to build a very simple language, with no shortcuts or convienence features.
+
+``` 
 ACTOR Bob // Create an actor called Bob
 ACTOR FrontEnd // Create an actor called FrontEnd
+DATA Password // Password exists as an entity that can be moved around
+
+## Version 0.2
+Introduces 
+IS - to set properties
+
