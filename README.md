@@ -16,6 +16,9 @@ Newlines separate statements, one statement per line, no line length limits
 Actors, data, transports, boundaries, are all created and manipulated using Keywords - Keywords in ltm are always capitalized.
 Any keyword created variable exists within a global context.
 
+## Reference example
+An online book review site. Unauthenticated users can list books and read reviews. Authenticated users can write reviews.
+
 ## Version 0.1
 | Keyword | Parameter | Meaning | 
 | ------- | --------| --- |
@@ -35,9 +38,12 @@ ltm reads like a recipie book from the 1920's statements are instructions of wha
 In version 0.1 the goal is to build a very simple language, with no shortcuts or convienence features.
 
 ``` 
-ACTOR Bob // Create an actor called Bob
-ACTOR FrontEnd // Create an actor called FrontEnd
-DATA Password // Password exists as an entity that can be moved around
+ACTOR User // Create an actor called User
+ACTOR Nginx // Create an actor called Nginx
+DATA Credentials // Credentials exists as an entity that can be moved around
+TRANSPORT TLS // Create a transport called TLS (later this will be a built-in)
+
+```
 
 ## Version 0.2
 Introduces 
