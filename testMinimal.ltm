@@ -1,0 +1,3 @@
+scene: "Fetch Page"
+client server: "GET /"
+client server: IP(ICMP("Ping"))

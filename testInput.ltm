@@ -1,0 +1,15 @@
+scene: "Fetch Page"
+client server: "GET /"
+server database: "Fetch Content"
+database server: "Content"
+server client: "HTML"
+
+scene: "Update name"
+client server: "POST /name?update=name"
+server client: "200 OK"
+
+scene: "Send ICMP"
+client server: IP(ICMP("Ping"))
+
+boundary "Internet": client
+boundary "AWS": server database
