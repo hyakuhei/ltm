@@ -28,6 +28,7 @@ grammar = """
 
 import json
 import logging
+import sys
 
 from deepdiff import DeepDiff
 
@@ -79,7 +80,6 @@ class MyVisitor(Visitor_Recursive):
                 flow["to"] = str(sub.children[0])
             if sub.data == "protocol":
                 # Nested protocol
-                print(f"Found protocol: {str(sub.children[0])}")
                 protocols.append(str(sub.children[0]))
             if sub.data == "flow":
                 # Check to see if we have protocols that this should be nestled in
@@ -119,23 +119,22 @@ def test():
         # Parse the input file
         parseTree = parser.parse(sample.read())
         MyVisitor().visit_topdown(parseTree)
-        print(json.dumps(doc, indent=4, sort_keys=True))
+        print(json.dumps(doc, indent=4, sort_keys=True), end='')
 
         # Compare test input with hand crafted json
-        with open("targetTestOutput.json", "r") as testTarget:
-            testDoc = json.loads(testTarget.read())
-            diff = DeepDiff(testDoc, doc)
-            if diff == {}:
-                pass
-            else:
-                print(diff)
-        
+        #with open("targetTestOutput.json", "r") as testTarget:
+        #    testDoc = json.loads(testTarget.read())
+        #    diff = DeepDiff(testDoc, doc)
+        #    if diff == {}:
+        #        pass
+        #    else:
+        #        print(diff)
+
+def main():
+    parseTree = parser.parse(sys.stdin.read())
+    MyVisitor().visit_topdown(parseTree)
+    print(json.dumps(doc, indent=4, sort_keys=True), end='')
 
 if __name__ == "__main__":
-    test()
-    # main()
-    # commands:
-    ## input-file
-    ## input-format
-    ## output-file
-    ## output-file
+    # test()
+    main()

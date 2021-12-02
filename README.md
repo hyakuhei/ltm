@@ -52,15 +52,3 @@ Nginx User: TLS(HTTP(Cookie))
 ```
 
 
-
-
-  
- 
-
-```
-
-## Version 0.2
-Introduces 
-IS - to set properties
-HTTP-REQUEST - to make a specific HTTP request
-
