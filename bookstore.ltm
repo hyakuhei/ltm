@@ -1,0 +1,28 @@
+scene: "User lists books"
+client Nginx: HTTP("GET /books")
+Nginx Database: SQL("All Book Titles")
+Database Nginx: "Title"
+Nginx client: HTTP(HTML("Books"))
+
+scene: "User login"
+client Nginx: HTTP("GET /login")
+Nginx client: HTTP("302 Google Oauth")
+client GoogleOauth: "Request Token"
+GoogleOauth client: "Token"
+client Nginx: "Token"
+Nginx client: "Cookie"
+
+scene: "User buys book"
+client Nginx: "POST /buy?bookid=3"
+Nginx Ordering: "User X buys book3"
+Ordering Warehouse: "Start picking book3 for customer X"
+Warehouse Database: "Get address for customer X"
+Database Warehouse: "Customer address"
+Warehouse Shipping: "Prepare invoice for shipping to address"
+
+boundary "Internet": client
+boundary "AWS": Nginx Ordering Database
+boundary "Warehouse Systems": Warehouse Shipping
+boundary "Google Cloud": GoogleOauth
+
+

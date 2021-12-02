@@ -13,54 +13,42 @@ ltm has a simple DSL for describing architectures, this allows diagrams to be st
 # Language
 Newlines separate statements, one statement per line, no line length limits
 
-Actors, data, transports, boundaries, are all created and manipulated using Keywords - Keywords in ltm are always capitalized.
-Any keyword created variable exists within a global context.
+Keywords: scene, boundary - these mean something and you can't use them outside of "defined strings"
+Special characters: ":" - assigns thing on the right to thing on the left
+scene: <name of a scene>
+boundary <name of boundary>: <actor in boundary> <another actor in boundary>
+
+Dataflows: describe how one actor talks to another, the format is:
+<pitcher> <catcher>: "data" e.g:
+```alice bob: "Oh hai"```
+
+Dataflows can also contain protocol information, described as 'protocol("data")' e.g:
+```alice bob: TELNET("Oh Hai")```
+
+Protocols can also be nested e.g:
+```server client: IP(TLS(HTTP(HTML("index"))))```
+
+Boundaries can be declared before, or after scenes.
 
 ## Reference example
 An online book review site. Unauthenticated users can list books and read reviews. Authenticated users can write reviews.
 
-## Version 0.1
-| Keyword | Parameter | Meaning | 
-| ------- | --------| --- |
-| //      | Everything after | a comment, everything after // is ignored |
-| ACTOR   | Single Word | An entity in the diagram |
-| TRANSPORT | Single Word | A mechanism for moving data from one actor to another. |
-| DATA    | Single Word | A piece of data - which can be owned by an actor and sent via a transport |
-| BOUNDARY | Single Word | A logical trust boundary - this could be physical like a wall, or virtual like a vlan it depends on the architecture |
-| SEND | Acts on Actor to Left and Right of SEND | An instruction to send some data, from an actor, to an actor, possibly using a specific transport |
-| IN | Single Word | Tells an entity that it is within a Boundary. |
-| EXEC | Everything after | Tells an entity to perform an instruction, often used for notes about important computation |
-| USE | Single Word | <Optional> can be used with SEND to describe which transport to use |
-| SCENE | Everything after | describe a new scene, optionally ending the scene previous |
-
- 
-
-ltm reads like a recipie book from the 1920's statements are instructions of what to do.
-
-### Example
-In version 0.1 the goal is to build a very simple language, with no shortcuts or convienence features.
-
-Note the first scene will often define a lot of entities, as the first scene is a blank slate. Entities are "global" in scope, so once declared in one scene they can be used in others
-
 ``` 
-SCENE User views list of current reviews
-ACTOR User // Create an actor called User
-ACTOR Nginx // Create an actor called Nginx
-ACTOR DB
-TRANSPORT TLS // Create a transport called TLS (later this will be a built-in)
-DATA GetRequest
-User SEND Nginx GetRequest USE TLS
-DATA AllBookQuery
+scene: "See reviewed books"
+User Nginx: TLS(HTTP("GET /"))
+Nginx DB: SQL(User,Pass,Query("Get All Books"))
+DB Nginx: SQL("All Books")
+DB Nginx: TLS(HTTP(HTML("All Books")))
 
+boundary "Internet": User
+boundary "Front End": Nginx
+boundary "Backend": DB
 
-  
- 
-
+scene: "User authenticates"
+User Nginx: TLS(HTTP("POST /login"))
+Nginx DB: SQL(Query("Compare credential hash with stored hash"))
+DB Nginx: SQL(True)
+Nginx User: TLS(HTTP(Cookie))
 ```
-
-## Version 0.2
-Introduces 
-IS - to set properties
-HTTP-REQUEST - to make a specific HTTP request
 
 
