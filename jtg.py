@@ -28,6 +28,12 @@ def genGraph(doc, sceneName, useSmartLinks=False, linkCounters = True):
     drawnActors = {}
     linkCounter = 0
 
+    graph.styleAppend("Boundary", "color", "red")
+
+    graph.styleAppend("Actor", "shape", "box")
+
+    graph.styleAppend("Flow", "fontsize", 10)
+
     # Loop through and draw any actors/boundaries we need
     for flow in sceneToDraw:
         for actor in [flow['to'], flow['from']]:
@@ -38,12 +44,15 @@ def genGraph(doc, sceneName, useSmartLinks=False, linkCounters = True):
                     boundary = doc["actors"][actor]["boundary"]
                     if boundary not in drawnBoundaries:
                         drawnBoundaries[boundary] = graph.newItem(boundary)
+                        graph.styleApply("Boundary", drawnBoundaries[boundary])
                     
                     drawnActors[actor] = graph.newItem(actor, drawnBoundaries[boundary])
+                graph.styleApply("Actor", drawnActors[actor])
         
         linkCounter += 1
         flowLabel = flow['data'] if linkCounters == False else f"{linkCounter} {flow['data']}"
-        graph.newLink(drawnActors[flow['from']], drawnActors[flow['to']], label=flowLabel)      
+        link = graph.newLink(drawnActors[flow['from']], drawnActors[flow['to']], label=flowLabel)      
+        graph.styleApply("Flow", link)
 
     return graph
 

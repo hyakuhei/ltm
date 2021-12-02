@@ -21,7 +21,7 @@ Database Warehouse: "Customer address"
 Warehouse Shipping: "Prepare invoice for shipping to address"
 
 boundary "Internet": client
-boundary "AWS": Nginx Ordering
+boundary "AWS": Nginx Ordering Database
 boundary "Warehouse Systems": Warehouse Shipping
 boundary "Google Cloud": GoogleOauth
 
