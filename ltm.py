@@ -126,7 +126,7 @@ def test():
             testDoc = json.loads(testTarget.read())
             diff = DeepDiff(testDoc, doc)
             if diff == {}:
-                print("PASSED TEST")
+                pass
             else:
                 print(diff)
         
