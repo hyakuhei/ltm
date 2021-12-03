@@ -1,0 +1,9 @@
+scene: "Nested infra test"
+alice bob: "Hai"
+bob jeff: "Also hai"
+
+boundary "bubble": bob
+boundary "shell": "bubble"
+boundary "casing": "shell"
+boundary "fence": "casing"
+boundary "perimiter": "fence"

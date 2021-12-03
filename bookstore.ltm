@@ -1,7 +1,7 @@
 scene: "User lists books"
 client Nginx: HTTP("GET /books")
-Nginx Database: SQL("All Book Titles")
-Database Nginx: "Title"
+Nginx Database: SQL("All book titles")
+Database Nginx: "Titles"
 Nginx client: HTTP(HTML("Books"))
 
 scene: "User login"
@@ -19,10 +19,12 @@ Ordering Warehouse: "Start picking book3 for customer X"
 Warehouse Database: "Get address for customer X"
 Database Warehouse: "Customer address"
 Warehouse Shipping: "Prepare invoice for shipping to address"
+Shipping DHL: "Ship Order"
 
 boundary "Internet": client
-boundary "AWS": Nginx Ordering Database
-boundary "Warehouse Systems": Warehouse Shipping
+boundary "AWS": Nginx Ordering
+boundary "OCI": Database
 boundary "Google Cloud": GoogleOauth
+boundary "Warehouse Systems": Warehouse Shipping
 
-
+nest "Internet": "Google Cloud" "AWS"
