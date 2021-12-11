@@ -22,9 +22,12 @@ Warehouse Shipping: "Prepare invoice for shipping to address"
 Shipping DHL: "Ship Order"
 
 boundary "Internet": client
-boundary "AWS": Nginx Ordering
 boundary "OCI": Database
 boundary "Google Cloud": GoogleOauth
 boundary "Warehouse Systems": Warehouse Shipping
+
+boundary "FE VPC": Nginx
+boundary "Backend VPC": Ordering
+boundary "AWS": "FE VPC" "Backend VPC"
 
 nest "Internet": "Google Cloud" "AWS"
