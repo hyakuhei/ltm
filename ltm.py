@@ -39,7 +39,7 @@ from lark.visitors import Visitor_Recursive
 
 parser = Lark(grammar)
 
-doc = {"actors": {}, "boundaries": {}, "scenes": [], "reserve":[]}
+doc = {"actors": {}, "boundaries": {}, "scenes": [], "reserve": []}
 
 globalContext = {"currentScene": "UNSET", "boundaryNameCache": []}
 _sceneMap = {}
@@ -54,7 +54,7 @@ class MyVisitor(Visitor_Recursive):
             )
 
         actor = str(tree.children[0])
-        assert actor not in doc['reserve'] #TODO: Error check
+        assert actor not in doc["reserve"]  # TODO: Error check
 
         if str(tree.children[0]) not in doc["actors"]:
             doc["actors"][str(tree.children[0])] = {}
@@ -191,16 +191,6 @@ class MyVisitor(Visitor_Recursive):
 
             if child.type == "WORD":
                 doc["boundaries"][thisBoundary]["actors"].append(str(child))
-
-
-## TODO: Add any additional enrichment magic (like say, required fields for a protocol)
-def enrich(doc: dict):
-    pass
-
-
-# diagram as code
-def dac(doc, engine: str = "dot"):
-    pass
 
 
 def test():

@@ -24,7 +24,9 @@ def search(parent, searchValue, path=None):
                 childPath = path[:]
                 childPath.append(key)
                 foundPath = search(parent[key], searchValue, path=childPath)
-                if foundPath!= None: #only break the loop if we've found what we were looking for
+                if (
+                    foundPath != None
+                ):  # only break the loop if we've found what we were looking for
                     return foundPath
 
     return None
