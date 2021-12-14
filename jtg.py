@@ -41,25 +41,31 @@ def genGraph(doc, sceneName, useSmartLinks=False, linkCounters=True):
 
     graph.styleAppend("Flow", "fontsize", 10)                
 
+    #graphContainer = graph.newItem("xxx", )
+    graphContainer = graph.newItem("Window", parent=None)
+
     # Loop through and draw any actors/boundaries we need
     for flow in sceneToDraw:
         for actor in [flow["to"], flow["from"]]:
+            parentBoundary = graphContainer
             if actor not in drawnActors:  # it's not been drawn yet
                 path = search(doc["boundaries"], actor)
-                if path is None:
-                    drawnActors[actor] = graph.newItem(actor)
-                else:
-                    rpath = [x for x in path if x != "actors" and x!= "boundaries"]
-                    parentBoundary = None
 
+                if path is not None:
+                    rpath = [x for x in path if x != "actors" and x!= "boundaries"]
                     for key in rpath:
-                        if key not in drawnBoundaries:
-                            drawnBoundaries[key] = graph.newItem(key, parentBoundary)
-                            graph.styleApply("Boundary", drawnBoundaries[key])
+                        if key in drawnBoundaries:
                             parentBoundary = drawnBoundaries[key]
                         else:
-                            parentBoundary = drawnBoundaries[key]
-                    drawnActors[actor] = graph.newItem(actor, parentBoundary)
+                            drawnBoundaries[key] = graph.newItem(key, parentBoundary)
+                            if parentBoundary:
+                                print(f"Drew {key} under {parentBoundary['properties']['label']}")
+                            else:
+                                print(f"Drew {key} under {parentBoundary}")
+                            graph.styleApply("Boundary", drawnBoundaries[key])
+                            parentBoundary = drawnBoundaries[key]                            
+
+                drawnActors[actor] = graph.newItem(actor, parentBoundary)
 
         linkCounter += 1
         flowLabel = (

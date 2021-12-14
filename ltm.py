@@ -39,7 +39,7 @@ from lark.visitors import Visitor_Recursive
 
 parser = Lark(grammar)
 
-doc = {"actors": {}, "boundaries": {}, "scenes": [], "reserve": []}
+doc = {"actors": {}, "boundaries": {}, "scenes": []}
 
 globalContext = {"currentScene": "UNSET", "boundaryNameCache": []}
 _sceneMap = {}
@@ -52,10 +52,7 @@ class MyVisitor(Visitor_Recursive):
             logging.error(
                 'All Dataflows must belong to a scene. Hint: define a scene using: scene:"TheScene"'
             )
-
-        actor = str(tree.children[0])
-        assert actor not in doc["reserve"]  # TODO: Error check
-
+            
         if str(tree.children[0]) not in doc["actors"]:
             doc["actors"][str(tree.children[0])] = {}
 
