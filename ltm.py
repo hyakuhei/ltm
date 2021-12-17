@@ -52,7 +52,7 @@ class MyVisitor(Visitor_Recursive):
             logging.error(
                 'All Dataflows must belong to a scene. Hint: define a scene using: scene:"TheScene"'
             )
-            
+
         if str(tree.children[0]) not in doc["actors"]:
             doc["actors"][str(tree.children[0])] = {}
 
