@@ -1,7 +1,22 @@
-def search(parent, searchValue, path=None):
-    """
-    Search through nested dictionaries and lists looking for a value.
-    Return the parameterized keys (or indexes) to reach that value
+"""Utility module for the ltm project
+
+* search - search a nested dict for value. Return list of keys
+* Dot - A dotFile renderer
+"""
+
+from typing import Union
+
+def search(parent: dict, searchValue, path: list = None):
+    """Search through nested dictionaries and lists looking for a value.
+
+
+    Args:
+        parent (dict): The first dictionary to start searching
+        searchValue (variable): The value being searched for
+        path (list, optional): The paths that have been searched. Defaults to None.
+
+    Returns:
+        list[keys]: List containing keys in required to traverse to the searched value
     """
     if path == None:
         path = []
@@ -12,11 +27,9 @@ def search(parent, searchValue, path=None):
     for key, value in parent.items():
         if searchValue in value:
             if isinstance(value, list):
-                print(f"Found {searchValue} in a list: {key}")
                 path.append(key)
                 return path
             else:
-                print(f"Found {searchValue} in a dict")
                 path.append(key)
                 return path
         else:
@@ -44,21 +57,19 @@ class Dot:
         2. A subgraph can only belong to 0..1 subgraphs
         """
 
-    def getNodes(self, label):
-        """
-        Return a list of nodes that have the provided label
-        """
-        return [x for x in self._nodes if x["label"] == label]
+    def newSubgraph(self, label: str ="", parent: dict=None) -> dict:
+        """Create a new subgraph
 
-    def getSubgraph(self, label):
-        """
-        Return a list of subgraphs that have the provided label
-        """
-        return [x for x in self._subgraphs if x["label"] == label]
+        Args:
+            label (str, optional): Label for the subgraph. Defaults to "".
+            parent (dict, optional): Make this subgraph a child of the parent. Defaults to None.
 
-    def newSubgraph(self, label="Anonymous", parent=None):
+        Returns:
+            dict: subgraph
+        """
         if parent is not None:
             assert parent in self._subgraphs
+            assert parent['nodetype'] == "subgraph"
 
         self._idCounter += 1
         newSub = {
@@ -70,9 +81,19 @@ class Dot:
         self._subgraphs.append(newSub)
         return newSub
 
-    def newNode(self, label="Anonymous", parent=None):
+    def newNode(self, label: str ="", parent: dict=None) -> dict:
+        """Create a new subgraph
+
+        Args:
+            label (str, optional): A label for the node. Defaults to "".
+            parent (dict, optional): Make this node a child of a parent subgraph. Defaults to None. Defaults to None.
+
+        Returns:
+            dict: [description]
+        """
         if parent is not None:
             assert parent in self._subgraphs
+            assert parent['nodetype'] == "subgraph"
 
         self._idCounter += 1
         node = {
@@ -84,12 +105,38 @@ class Dot:
         self._nodes.append(node)
         return node
 
-    def newLink(self, nodeA, nodeB, label=None):
+    def newLink(self, nodeA: dict, nodeB: dict, label:str =None) -> dict:
+        """Create a new link between nodes or subgraphs
+
+        Creates a directional link from nodeA to nodeB
+        Nodes can be subgraphs
+        The naming is not helpful
+
+        Args:
+            nodeA (dict): Node or subgraph
+            nodeB (dict): Node or subgraph
+            label (str, optional): Label for the link. Defaults to None.
+
+        Returns:
+            dict: [description]
+        """
         link = {"from": nodeA, "to": nodeB, "label": label}
         self._edges.append(link)
         return link
 
-    def recurse(self, item, s, depth=1, parent=None):
+    def recurse(self, item: dict, s: list, depth: int=1, parent: dict =None):
+        """Append dot formatted strings to s
+
+        strings are immutable in python, you can't pass a string to this function
+        instead you pass a list `s` each recursive call appends strings to `s`
+        later those can be joined to make one big string.
+
+        Args:
+            item (dict): The node or subgraph to recurse
+            s (list): a list of strings that this method will append to
+            depth (int, optional): Used to track depth in the tree and format identation. Defaults to 1.
+            parent (dict, optional): The parent of item, if it has one. Defaults to None.
+        """
         openBrace = "{"
         closeBrace = "}"
         tab = "    "
@@ -131,6 +178,7 @@ class Dot:
         edgeStyle = 'fontsize="10",penwidth="1.2",arrowsize="0.8"'
         for edge in self._edges:
             if edge["label"] != None:
+                #example: node1->node2 [label="meep" fontsize="10",penwidth="1.2",arrowsize="0.8"];
                 s = f'node{edge["from"]["id"]}->node{edge["to"]["id"]} [label="{edge["label"]}" {edgeStyle}];'
             else:
                 s = f'node{edge["from"]["id"]}->node{edge["to"]["id"]} [{edgeStyle}];'
