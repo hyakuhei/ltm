@@ -159,7 +159,12 @@ class Dot:
         if item["nodetype"] == "node":
             s.append(f'{tab*depth}node{item["id"]} [label="{item["label"]}"];')
 
-    def dot(self):
+    def dot(self) -> str:
+        """Generate a string of the dot graph
+
+        Returns:
+            str: string representing the graph in dot format
+        """
         # Every subgraph with no parent is the root of it's own tree
         # Every node with no parent is the root of it's own tree
         dotStrings = []
