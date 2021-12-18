@@ -6,6 +6,7 @@
 
 from typing import Union
 
+
 def search(parent: dict, searchValue, path: list = None):
     """Search through nested dictionaries and lists looking for a value.
 
@@ -57,7 +58,7 @@ class Dot:
         2. A subgraph can only belong to 0..1 subgraphs
         """
 
-    def newSubgraph(self, label: str ="", parent: dict=None) -> dict:
+    def newSubgraph(self, label: str = "", parent: dict = None, style: str = 'color="Coral1"') -> dict:
         """Create a new subgraph
 
         Args:
@@ -69,7 +70,7 @@ class Dot:
         """
         if parent is not None:
             assert parent in self._subgraphs
-            assert parent['nodetype'] == "subgraph"
+            assert parent["nodetype"] == "subgraph"
 
         self._idCounter += 1
         newSub = {
@@ -77,12 +78,13 @@ class Dot:
             "label": label,
             "parent": parent,
             "nodetype": "subgraph",
+            "style":style
         }
         self._subgraphs.append(newSub)
         return newSub
 
-    def newNode(self, label: str ="", parent: dict=None) -> dict:
-        """Create a new subgraph
+    def newNode(self, label: str = "", parent: dict = None, style: str = 'shape="box", margin="0.1", color="Grey"') -> dict:
+        """Create a new node
 
         Args:
             label (str, optional): A label for the node. Defaults to "".
@@ -93,7 +95,7 @@ class Dot:
         """
         if parent is not None:
             assert parent in self._subgraphs
-            assert parent['nodetype'] == "subgraph"
+            assert parent["nodetype"] == "subgraph"
 
         self._idCounter += 1
         node = {
@@ -101,11 +103,12 @@ class Dot:
             "label": label,
             "parent": parent,
             "nodetype": "node",
+            "style":style
         }
         self._nodes.append(node)
         return node
 
-    def newLink(self, nodeA: dict, nodeB: dict, label:str =None) -> dict:
+    def newLink(self, nodeA: dict, nodeB: dict, label: str = "", style: str = 'fontsize="10",penwidth="1.2",arrowsize="0.8"') -> dict:
         """Create a new link between nodes or subgraphs
 
         Creates a directional link from nodeA to nodeB
@@ -115,16 +118,16 @@ class Dot:
         Args:
             nodeA (dict): Node or subgraph
             nodeB (dict): Node or subgraph
-            label (str, optional): Label for the link. Defaults to None.
+            label (str, optional): Label for the link. Defaults to "".
 
         Returns:
             dict: [description]
         """
-        link = {"from": nodeA, "to": nodeB, "label": label}
+        link = {"from": nodeA, "to": nodeB, "label": label, "style": style}
         self._edges.append(link)
         return link
 
-    def recurse(self, item: dict, s: list, depth: int=1, parent: dict =None):
+    def recurse(self, item: dict, s: list, depth: int = 1, parent: dict = None):
         """Append dot formatted strings to s
 
         strings are immutable in python, you can't pass a string to this function
@@ -145,6 +148,7 @@ class Dot:
             # Write the opening for this subgraph
             s.append(f"{tab*depth}subgraph cluster{item['id']} {openBrace}")
             s.append(f'{tab*depth}label="{item["label"]}";')
+            s.append(f'{tab*depth}{item["style"]};')
 
             # Gather any nodes/subgraphs that are children of this subgraph
             children = [x for x in self._nodes if x["parent"] == item] + [
@@ -157,10 +161,13 @@ class Dot:
             s.append(f"{tab*depth}{closeBrace}")
 
         if item["nodetype"] == "node":
-            s.append(f'{tab*depth}node{item["id"]} [label="{item["label"]}"];')
+            s.append(f'{tab*depth}node{item["id"]} [label="{item["label"]}" {item["style"]}];')
 
-    def dot(self) -> str:
+    def dot(self, compoundLinks=False) -> str:
         """Generate a string of the dot graph
+
+        Args:
+            compundLinks (bool): The node or
 
         Returns:
             str: string representing the graph in dot format
@@ -178,15 +185,45 @@ class Dot:
         for node in [x for x in self._nodes if x["parent"] == None]:
             self.recurse(sub, dotStrings)
 
-        # return f"nodes: {self._nodes}" + f"\nsubgraphs: {self._subgraphs}"
+        if compoundLinks == True:
+            # Compound links _over-rides_ styling
+            lookup = {}
+            edgesToDraw = []
+
+            # First do a pass to count the repeated edges (between any two nodes)
+            for edge in self._edges:
+                if (edge["from"]["id"], edge["to"]["id"]) in lookup:
+                    lookup[(edge["from"]["id"], edge["to"]["id"])]["count"] += 1
+                elif (edge["to"]["id"], edge["from"]["id"]) in lookup:
+                    lookup[(edge["to"]["id"], edge["from"]["id"])]["count"] += 1
+                else:
+                    lookup[(edge["from"]["id"], edge["to"]["id"])] = {
+                        "count": 1,
+                        "edge": edge,
+                    }
+
+            # List a new set of edges, only one for each node
+            # Double ended when required
+            # Thicker when there's more connections
+            for x in lookup.keys():
+                modifiedEdge = lookup[x][
+                    "edge"
+                ].copy()  # Edges are provided by the user, don't modify them
+                modifiedEdge["label"] = ""
+                style = f'fontsize="10", penwidth="{1.2 * lookup[x]["count"]}", arrowsize="0.8"'
+                if lookup[x]["count"] > 1:
+                    modifiedEdge["style"] = f"dir=both, {style}"
+                else:
+                    modifiedEdge["style"] = style
+
+                edgesToDraw.append(modifiedEdge)
+        else:
+            edgesToDraw = self._edges
+
         # Write the links
-        edgeStyle = 'fontsize="10",penwidth="1.2",arrowsize="0.8"'
-        for edge in self._edges:
-            if edge["label"] != None:
-                #example: node1->node2 [label="meep" fontsize="10",penwidth="1.2",arrowsize="0.8"];
-                s = f'node{edge["from"]["id"]}->node{edge["to"]["id"]} [label="{edge["label"]}" {edgeStyle}];'
-            else:
-                s = f'node{edge["from"]["id"]}->node{edge["to"]["id"]} [{edgeStyle}];'
+        for edge in edgesToDraw:
+            # example: node1->node2 [label="meep" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+            s = f'node{edge["from"]["id"]}->node{edge["to"]["id"]} [label="{edge["label"]}" {edge["style"]}];'
 
             dotStrings.append(s)
 
@@ -205,9 +242,10 @@ class Dot:
         b2 = graph.newSubgraph("b1", parent=b1)
         b3 = graph.newNode("b3", parent=b2)
 
-        graph.newLink(b3, a3, label="OMG WHZT")
+        graph.newLink(b3, a3, label="OMG WHZT?")
+        graph.newLink(a3, b3, label="I KNOW RIGHT!")
 
-        print(graph.dot())
+        print(graph.dot(compoundLinks=True))
 
 
 # XXX: Remove

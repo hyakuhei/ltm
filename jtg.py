@@ -2,8 +2,8 @@ import json, subprocess, sys
 
 from util import search, Dot
 
+#This is ugly
 ARCH = "High Level Architecture"
-
 
 def drawRecursiveBoundaries(doc, boundaryKey, graph, drawnBoundaries=None):
     if drawnBoundaries is None:
@@ -13,11 +13,7 @@ def drawRecursiveBoundaries(doc, boundaryKey, graph, drawnBoundaries=None):
 
 
 # TODO: Smartlinks
-def genGraph(doc, sceneName, useSmartLinks=True, linkCounters=True):
-
-    # XXX: Temporary over-ride to turn this off until smartlinks implemented
-    if useSmartLinks == True:
-        useSmartLinks = False
+def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True):
 
     sceneToDraw = None
     for sceneDict in doc["scenes"]:
@@ -28,9 +24,6 @@ def genGraph(doc, sceneName, useSmartLinks=True, linkCounters=True):
     # Prep the graph
     graph = Dot()
 
-    # Left over from GvGen - I'll implement something like
-    # this soon, so leaving here as a reminder.
-    # graph.smart_mode = 1 if useSmartLinks else 0
     drawnBoundaries = {}
     drawnActors = {}
     linkCounter = 0
@@ -40,9 +33,13 @@ def genGraph(doc, sceneName, useSmartLinks=True, linkCounters=True):
     # graph.styleAppend("Actor", "shape", "box")
     # graph.styleAppend("Flow", "fontsize", 10)
 
-    # graphContainer = graph.newItem("xxx")
-    graphContainer = graph.newSubgraph("Window")
-    # graphContainer = None
+    _STYLES = {
+        'boundary':'color="Red"',
+        'node':'shape="Box"',
+        'link':'fontsize="10"'
+    }
+
+    graphContainer = graph.newSubgraph(sceneName, style='color="Black"')
 
     # Loop through and draw any actors/boundaries we need
     for flow in sceneToDraw:
@@ -65,8 +62,6 @@ def genGraph(doc, sceneName, useSmartLinks=True, linkCounters=True):
                             # else:
                             #    print(f"Drew {key} under {parentBoundary}")
 
-                            # TODO: Replace when util supports Styling
-                            # graph.styleApply("Boundary", drawnBoundaries[key])
                             parentBoundary = drawnBoundaries[key]
 
                 drawnActors[actor] = graph.newNode(actor, parent=parentBoundary)
@@ -116,24 +111,25 @@ def prepDoc(doc):
     return doc
 
 
-def main(generateArchDiagram=True, saveDot=False):
+def main(generateArchDiagram=True):
     doc = json.loads(sys.stdin.read())
     doc = prepDoc(doc)
     graph = None
 
     if generateArchDiagram == True:  # TODO: Make this a command line argument
         doc = addArchScene(doc)  # adds an ARCH scene to the doc
+        doc["scenes"] # Arch scene is just all of the existing scenes, bundled into one big one and run with compoundLinks
 
     for scene in doc["scenes"]:
         for sceneName in scene.keys():
-            if sceneName == ARCH:
-                graph = genGraph(doc, sceneName, useSmartLinks=True, linkCounters=False)
-            else:
-                graph = genGraph(doc, sceneName)
+            graph = genGraph(doc, sceneName)
 
             fileName = f"output/{sceneName}"
             with open(f"{fileName}.dot", "w") as f:
-                f.write(graph.dot())
+                if sceneName == ARCH:
+                    f.write(graph.dot(compoundLinks=True))
+                else:
+                    f.write(graph.dot())
 
             _ = subprocess.run(
                 ["dot", "-s100", "-Tpng", f"{fileName}.dot", f"-o{fileName}.png"]
@@ -141,4 +137,4 @@ def main(generateArchDiagram=True, saveDot=False):
 
 
 if __name__ == "__main__":
-    main(generateArchDiagram=False, saveDot=True)
+    main(generateArchDiagram=True)
