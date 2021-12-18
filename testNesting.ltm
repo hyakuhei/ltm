@@ -1,0 +1,16 @@
+scene: "Nested infra test"
+alice bob: "Hai"
+bob cat: "Also hai"
+cat bob: "I hate you"
+cat dog: "Woof?"
+
+boundary "Top": alice 
+boundary "Middle": bob
+boundary "Bottom": cat
+
+boundary "Top": "Middle"
+boundary "Middle": "Bottom"
+
+boundary "Kennel": dog
+boundary "House": "Kennel"
+boundary "Street": "House"

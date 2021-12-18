@@ -1,3 +1,9 @@
 scene: "Fetch Page"
-client server: "GET /"
-client server: IP(ICMP("Ping"))
+client serverA: "GET /"
+client serverB: "POST /"
+client serverC: IP(ICMP("Ping"))
+
+boundary "Internet": client
+boundary "AWS": serverB serverC
+
+boundary "Global": "Internet" "AWS"
