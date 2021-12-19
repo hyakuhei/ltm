@@ -1,0 +1,21 @@
+digraph G {
+compound=true;
+    subgraph cluster1 {
+    label="User generates json representation";
+    color="Black";
+        node4 [label="user" shape="box", margin="0.1", color="Grey"];
+        node5 [label="python" shape="box", margin="0.1", color="Grey"];
+        node6 [label="stdio" shape="box", margin="0.1", color="Grey"];
+        subgraph cluster2 {
+        label="Posix";
+        color="Coral1";
+            node3 [label="shell" shape="box", margin="0.1", color="Grey"];
+            node7 [label="filesystem" shape="box", margin="0.1", color="Grey"];
+        }
+    }
+node4->node3 [label="1 cat ltm.ltm | python3 ltm.py > out.json" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node3->node5 [label="2 load ltm.py" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node5->node5 [label="3 Parse ltm and generate json" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node5->node6 [label="4 Write json" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node3->node7 [label="5 Write json into out.json" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+}

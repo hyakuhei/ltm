@@ -1,0 +1,16 @@
+digraph G {
+compound=true;
+    subgraph cluster1 {
+    label="User edits .ltm file";
+    color="Black";
+        node2 [label="editor" shape="box", margin="0.1", color="Grey"];
+        node3 [label="user" shape="box", margin="0.1", color="Grey"];
+        subgraph cluster4 {
+        label="Posix";
+        color="Coral1";
+            node5 [label="filesystem" shape="box", margin="0.1", color="Grey"];
+        }
+    }
+node3->node2 [label="1 Edit ltm.ltm file" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node2->node5 [label="2 Save ltm file" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+}

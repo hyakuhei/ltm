@@ -1,0 +1,28 @@
+digraph G {
+compound=true;
+    subgraph cluster1 {
+    label="High Level Architecture";
+    color="Black";
+        node2 [label="editor" shape="box", margin="0.1", color="Grey"];
+        node3 [label="user" shape="box", margin="0.1", color="Grey"];
+        node7 [label="python" shape="box", margin="0.1", color="Grey"];
+        node8 [label="stdio" shape="box", margin="0.1", color="Grey"];
+        node9 [label="dot" shape="box", margin="0.1", color="Grey"];
+        subgraph cluster4 {
+        label="Posix";
+        color="Coral1";
+            node5 [label="filesystem" shape="box", margin="0.1", color="Grey"];
+            node6 [label="shell" shape="box", margin="0.1", color="Grey"];
+        }
+    }
+node3->node2 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
+node2->node5 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
+node3->node6 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
+node6->node7 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
+node7->node7 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
+node7->node8 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
+node6->node5 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
+node7->node5 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
+node7->node9 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
+node9->node5 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
+}
