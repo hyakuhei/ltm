@@ -1,0 +1,33 @@
+scene: "Double Nest"
+atop amiddle: "x"
+amiddle abottom: "x"
+
+boundary "Alpha TOP": atop
+boundary "Alpha MIDDLE": amiddle
+boundary "Alpha BOTTOM": abottom
+
+boundary "Alpha Container": "Alpha TOP"
+boundary "Alpha TOP": "Alpha MIDDLE"
+boundary "Alpha MIDDLE": "Alpha BOTTOM"
+
+btop bmiddle: "y"
+bmiddle bbottom: "y"
+
+boundary "Bravo TOP": btop
+boundary "Bravo MIDDLE": bmiddle
+boundary "Bravo BOTTOM": bbottom
+
+boundary "Bravo Container": "Bravo TOP"
+boundary "Bravo TOP": "Bravo MIDDLE"
+boundary "Bravo Middle": "Bravo BOTTOM"
+
+ctop cmiddle: "z"
+cmiddle cbottom: "z"
+
+boundary "Charlie TOP": ctop
+boundary "Charlie MIDDLE": cmiddle
+boundary "Charlie BOTTOM": cbottom
+
+boundary "Charlie Container": "Charlie TOP"
+boundary "Charlie TOP": "Charlie MIDDLE"
+boundary "Charlie MIDDLE": "Charlie BOTTOM"
