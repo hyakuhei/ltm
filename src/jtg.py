@@ -111,7 +111,7 @@ def prepDoc(doc):
     return doc
 
 
-def main(generateArchDiagram=True):
+def main(generateArchDiagram=True,markdown=False):
     doc = json.loads(sys.stdin.read())
     doc = prepDoc(doc)
     graph = None
@@ -135,6 +135,13 @@ def main(generateArchDiagram=True):
                 ["dot", "-s100", "-Tpng", f"{fileName}.dot", f"-o{fileName}.png"]
             )
 
+            if markdown:
+                print(f"## {sceneName}")
+                print(f"![{sceneName}]({fileName}.png)")
+                for flow in scene:
+                    print(flow)
+
 
 if __name__ == "__main__":
-    main(generateArchDiagram=True)
+    #TODO argument handling
+    main(generateArchDiagram=True, markdown=True)

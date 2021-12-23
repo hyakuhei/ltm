@@ -1,0 +1,22 @@
+digraph G {
+compound=true;
+    subgraph cluster1 {
+    label="User renders diagrams";
+    color="Black";
+        node4 [label="user" shape="box", margin="0.1", color="Grey"];
+        node5 [label="python" shape="box", margin="0.1", color="Grey"];
+        node7 [label="dot" shape="box", margin="0.1", color="Grey"];
+        subgraph cluster2 {
+        label="Posix";
+        color="Coral1";
+            node3 [label="shell" shape="box", margin="0.1", color="Grey"];
+            node6 [label="filesystem" shape="box", margin="0.1", color="Grey"];
+        }
+    }
+node4->node3 [label="1 cat out.json | python3 jtg.py" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node3->node5 [label="2 load jtg.py" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node5->node5 [label="3 Parse json and generate .dot and .png" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node5->node6 [label="4 Write .dot files" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node5->node7 [label="5 Call dot to generate .png files" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node7->node6 [label="6 Write .png" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+}

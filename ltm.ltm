@@ -1,0 +1,20 @@
+scene: "User edits .ltm file"
+user editor: "Edit ltm.ltm file"
+editor filesystem: "Save ltm file"
+
+scene: "User generates json representation"
+user shell: "cat ltm.ltm | python3 ltm.py > out.json"
+shell python: "load ltm.py"
+python python: "Parse ltm and generate json"
+python stdio: "Write json"
+shell filesystem: "Write json into out.json"
+
+scene: "User renders diagrams"
+user shell: "cat out.json | python3 jtg.py"
+shell python: "load jtg.py"
+python python: "Parse json and generate .dot and .png"
+python filesystem: "Write .dot files"
+python dot: "Call dot to generate .png files"
+dot filesystem: "Write .png"
+
+boundary "Posix": shell filesystem
