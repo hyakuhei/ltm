@@ -32,7 +32,7 @@ Protocols can also be nested e.g:
 Boundaries can be declared before, or after scenes.
 
 ## The LTM process
-![Process](static/User renders diagrams.png)
+![Process](blob/main/static/User%20generates%20json%20representation.png)
 
 ```
 scene: "User renders diagrams"
