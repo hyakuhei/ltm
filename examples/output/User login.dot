@@ -1,0 +1,32 @@
+digraph G {
+compound=true;
+    subgraph cluster1 {
+    label="User login";
+    color="Black";
+        subgraph cluster2 {
+        label="AWS";
+        color="Coral1";
+            subgraph cluster3 {
+            label="FE VPC";
+            color="Coral1";
+                node4 [label="Nginx" shape="box", margin="0.1", color="Grey"];
+            }
+        }
+        subgraph cluster5 {
+        label="Internet";
+        color="Coral1";
+            node6 [label="client" shape="box", margin="0.1", color="Grey"];
+        }
+        subgraph cluster7 {
+        label="Google Cloud";
+        color="Coral1";
+            node8 [label="GoogleOauth" shape="box", margin="0.1", color="Grey"];
+        }
+    }
+node6->node4 [label="1 GET /login" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node4->node6 [label="2 302 Google Oauth" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node6->node8 [label="3 Request Token" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node8->node6 [label="4 Token" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node6->node4 [label="5 Token" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node4->node6 [label="6 Cookie" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+}

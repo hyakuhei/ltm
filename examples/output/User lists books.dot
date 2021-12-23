@@ -1,0 +1,30 @@
+digraph G {
+compound=true;
+    subgraph cluster1 {
+    label="User lists books";
+    color="Black";
+        subgraph cluster2 {
+        label="AWS";
+        color="Coral1";
+            subgraph cluster3 {
+            label="FE VPC";
+            color="Coral1";
+                node4 [label="Nginx" shape="box", margin="0.1", color="Grey"];
+            }
+        }
+        subgraph cluster5 {
+        label="Internet";
+        color="Coral1";
+            node6 [label="client" shape="box", margin="0.1", color="Grey"];
+        }
+        subgraph cluster7 {
+        label="OCI";
+        color="Coral1";
+            node8 [label="Database" shape="box", margin="0.1", color="Grey"];
+        }
+    }
+node6->node4 [label="1 GET /books" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node4->node8 [label="2 All book titles" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node8->node4 [label="3 Titles" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node4->node6 [label="4 Books" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+}
