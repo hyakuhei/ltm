@@ -21,6 +21,7 @@ boundary <name of boundary>: <actor in boundary> <another actor in boundary>
 Dataflows: describe how one actor talks to another, the format is:
 <pitcher> <catcher>: "data" e.g:
 ```alice bob: "Oh hai"```
+Each actor is a single word and case sensitive. ```Bob``` is a different actor to ```bob```
 
 Dataflows can also contain protocol information, described as 'protocol("data")' e.g:
 ```alice bob: TELNET("Oh Hai")```
@@ -30,7 +31,20 @@ Protocols can also be nested e.g:
 
 Boundaries can be declared before, or after scenes.
 
-## Reference example
+## The LTM process
+![Process](static/User renders diagrams.png)
+
+```
+scene: "User renders diagrams"
+user shell: "cat out.json | python3 jtg.py"
+shell python: "load jtg.py"
+python python: "Parse json and generate .dot and .png"
+python filesystem: "Write .dot files"
+python dot: "Call dot to generate .png files"
+dot filesystem: "Write .png"
+```
+
+## Another example
 An online book review site. Unauthenticated users can list books and read reviews. Authenticated users can write reviews.
 
 ``` 
