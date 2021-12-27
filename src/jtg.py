@@ -132,7 +132,7 @@ def main(generateArchDiagram=True,markdown=False):
                     f.write(graph.dot())
 
             _ = subprocess.run(
-                ["dot", "-s100", "-Tpng", f"{fileName}.dot", f"-o{fileName}.png"]
+                ["dot", "-s100", "-Tpng", f"{fileName}.dot", f"-o{fileName}.png"], shell=False
             )
 
             if markdown:
