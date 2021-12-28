@@ -28,11 +28,6 @@ def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True, printLabels
     drawnActors = {}
     linkCounter = 0
 
-    # Left over from GvGen - need to implement some type of stying.
-    # graph.styleAppend("Boundary", "color", "red")
-    # graph.styleAppend("Actor", "shape", "box")
-    # graph.styleAppend("Flow", "fontsize", 10)
-
     _STYLES = {
         'boundary':'color="Red"',
         'node':'shape="Box"',
@@ -68,7 +63,7 @@ def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True, printLabels
 
         linkCounter += 1
 
-        flowLabel = ""
+        flowLabel = "WAA"
         if linkCounters == True:
             flowLabel = f"{linkCounter}."
         
@@ -97,7 +92,7 @@ def addArchScene(doc):
     for f in archFlows:  # f is a tuple (from, to)
         d[ARCH].append({"from": f[0], "to": f[1], "data": ""})
 
-    doc["scenes"].append(d)
+    doc["scenes"].insert(0, d)
     return doc
 
 
@@ -119,9 +114,9 @@ def main(generateArchDiagram=True, markdown=False, printLabels=False):
     doc = prepDoc(doc)
     graph = None
 
+    scenes = doc['scenes']
     if generateArchDiagram == True:  # TODO: Make this a command line argument
         doc = addArchScene(doc)  # adds an ARCH scene to the doc
-        doc["scenes"] # Arch scene is just all of the existing scenes, bundled into one big one and run with compoundLinks
 
     for scene in doc["scenes"]:
         for sceneName in scene.keys():

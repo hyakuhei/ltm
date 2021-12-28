@@ -1,3 +1,5 @@
+## High Level Architecture
+![High Level Architecture](output/High%20Level%20Architecture.png)
 ## User lists books
 ![User lists books](output/User%20lists%20books.png)
 | Id | From | To | Data |
@@ -27,5 +29,3 @@
 | 5 | Database | Warehouse | Customer address |
 | 6 | Warehouse | Shipping | Prepare invoice for shipping to address |
 | 7 | Shipping | DHL | Ship Order |
-## High Level Architecture
-![High Level Architecture](output/High%20Level%20Architecture.png)

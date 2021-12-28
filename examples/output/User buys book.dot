@@ -35,11 +35,11 @@ compound=true;
             node12 [label="Database" shape="box", margin="0.1", color="Grey"];
         }
     }
-node6->node4 [label="1 POST /buy?bookid=3" fontsize="10",penwidth="1.2",arrowsize="0.8"];
-node4->node8 [label="2 User X buys book3" fontsize="10",penwidth="1.2",arrowsize="0.8"];
-node8->node10 [label="3 Start picking book3 for customer X" fontsize="10",penwidth="1.2",arrowsize="0.8"];
-node10->node12 [label="4 Get address for customer X" fontsize="10",penwidth="1.2",arrowsize="0.8"];
-node12->node10 [label="5 Customer address" fontsize="10",penwidth="1.2",arrowsize="0.8"];
-node10->node13 [label="6 Prepare invoice for shipping to address" fontsize="10",penwidth="1.2",arrowsize="0.8"];
-node13->node14 [label="7 Ship Order" fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node6->node4 [label="1." fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node4->node8 [label="2." fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node8->node10 [label="3." fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node10->node12 [label="4." fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node12->node10 [label="5." fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node10->node13 [label="6." fontsize="10",penwidth="1.2",arrowsize="0.8"];
+node13->node14 [label="7." fontsize="10",penwidth="1.2",arrowsize="0.8"];
 }
