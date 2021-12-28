@@ -110,7 +110,6 @@ def prepDoc(doc):
         path = search(doc["boundaries"], actor)
     return doc
 
-
 def main(generateArchDiagram=True,markdown=False):
     doc = json.loads(sys.stdin.read())
     doc = prepDoc(doc)
@@ -137,7 +136,7 @@ def main(generateArchDiagram=True,markdown=False):
 
             if markdown and sceneName != ARCH:
                 print(f"## {sceneName}")
-                print(f"![{sceneName}]({fileName}.png)")
+                print(f"![{sceneName}]({fileName.replace(' ', '%20')}.png)")
                 print("| From | To | Data |")
                 print("| ---- | -- | ---- |")
                 for flow in scene[sceneName]:
