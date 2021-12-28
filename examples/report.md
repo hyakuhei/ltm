@@ -1,29 +1,31 @@
 ## User lists books
 ![User lists books](output/User%20lists%20books.png)
-| From | To | Data |
-| ---- | -- | ---- |
-| client | Nginx | GET /books |
-| Nginx | Database | All book titles |
-| Database | Nginx | Titles |
-| Nginx | client | Books |
+| Id | From | To | Data |
+| -- | ---- | -- | ---- |
+| 1 | client | Nginx | GET /books |
+| 2 | Nginx | Database | All book titles |
+| 3 | Database | Nginx | Titles |
+| 4 | Nginx | client | Books |
 ## User login
 ![User login](output/User%20login.png)
-| From | To | Data |
-| ---- | -- | ---- |
-| client | Nginx | GET /login |
-| Nginx | client | 302 Google Oauth |
-| client | GoogleOauth | Request Token |
-| GoogleOauth | client | Token |
-| client | Nginx | Token |
-| Nginx | client | Cookie |
+| Id | From | To | Data |
+| -- | ---- | -- | ---- |
+| 1 | client | Nginx | GET /login |
+| 2 | Nginx | client | 302 Google Oauth |
+| 3 | client | GoogleOauth | Request Token |
+| 4 | GoogleOauth | client | Token |
+| 5 | client | Nginx | Token |
+| 6 | Nginx | client | Cookie |
 ## User buys book
 ![User buys book](output/User%20buys%20book.png)
-| From | To | Data |
-| ---- | -- | ---- |
-| client | Nginx | POST /buy?bookid=3 |
-| Nginx | Ordering | User X buys book3 |
-| Ordering | Warehouse | Start picking book3 for customer X |
-| Warehouse | Database | Get address for customer X |
-| Database | Warehouse | Customer address |
-| Warehouse | Shipping | Prepare invoice for shipping to address |
-| Shipping | DHL | Ship Order |
+| Id | From | To | Data |
+| -- | ---- | -- | ---- |
+| 1 | client | Nginx | POST /buy?bookid=3 |
+| 2 | Nginx | Ordering | User X buys book3 |
+| 3 | Ordering | Warehouse | Start picking book3 for customer X |
+| 4 | Warehouse | Database | Get address for customer X |
+| 5 | Database | Warehouse | Customer address |
+| 6 | Warehouse | Shipping | Prepare invoice for shipping to address |
+| 7 | Shipping | DHL | Ship Order |
+## High Level Architecture
+![High Level Architecture](output/High%20Level%20Architecture.png)

@@ -13,7 +13,7 @@ def drawRecursiveBoundaries(doc, boundaryKey, graph, drawnBoundaries=None):
 
 
 # TODO: Smartlinks
-def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True):
+def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True, printLabels=True):
 
     sceneToDraw = None
     for sceneDict in doc["scenes"]:
@@ -67,13 +67,17 @@ def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True):
                 drawnActors[actor] = graph.newNode(actor, parent=parentBoundary)
 
         linkCounter += 1
-        flowLabel = (
-            flow["data"] if linkCounters == False else f"{linkCounter} {flow['data']}"
-        )
+
+        flowLabel = ""
+        if linkCounters == True:
+            flowLabel = f"{linkCounter}."
+        
+        if printLabels == True:
+            flowLabel = flowLabel + flow["data"]
+
         link = graph.newLink(
             drawnActors[flow["from"]], drawnActors[flow["to"]], label=flowLabel
         )
-        # graph.styleApply("Flow", link)
 
     return graph
 
@@ -110,7 +114,7 @@ def prepDoc(doc):
         path = search(doc["boundaries"], actor)
     return doc
 
-def main(generateArchDiagram=True,markdown=False):
+def main(generateArchDiagram=True, markdown=False, printLabels=False):
     doc = json.loads(sys.stdin.read())
     doc = prepDoc(doc)
     graph = None
@@ -121,7 +125,7 @@ def main(generateArchDiagram=True,markdown=False):
 
     for scene in doc["scenes"]:
         for sceneName in scene.keys():
-            graph = genGraph(doc, sceneName)
+            graph = genGraph(doc, sceneName, printLabels=printLabels)
 
             fileName = f"output/{sceneName}"
             with open(f"{fileName}.dot", "w") as f:
@@ -134,15 +138,18 @@ def main(generateArchDiagram=True,markdown=False):
                 ["dot", "-s100", "-Tpng", f"{fileName}.dot", f"-o{fileName}.png"], shell=False
             )
 
-            if markdown and sceneName != ARCH:
+            if markdown:
                 print(f"## {sceneName}")
                 print(f"![{sceneName}]({fileName.replace(' ', '%20')}.png)")
-                print("| From | To | Data |")
-                print("| ---- | -- | ---- |")
-                for flow in scene[sceneName]:
-                    print(f"| {flow['from']} | {flow['to']} | {flow['data']} |")
+                if sceneName != ARCH:
+                    print("| Id | From | To | Data |")
+                    print("| -- | ---- | -- | ---- |")
+                    ctr = 1
+                    for flow in scene[sceneName]:
+                        print(f"| {ctr} | {flow['from']} | {flow['to']} | {flow['data']} |")
+                        ctr+=1 
 
 
 if __name__ == "__main__":
     #TODO argument handling
-    main(generateArchDiagram=True, markdown=True)
+    main(generateArchDiagram=True, markdown=True, printLabels=False)
