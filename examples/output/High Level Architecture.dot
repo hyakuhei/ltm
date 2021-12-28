@@ -40,12 +40,12 @@ compound=true;
             node15 [label="Shipping" shape="box", margin="0.1", color="Grey"];
         }
     }
-node6->node4 [label="" dir=both, fontsize="10", penwidth="2.4", arrowsize="0.8"];
-node4->node8 [label="" dir=both, fontsize="10", penwidth="2.4", arrowsize="0.8"];
-node6->node10 [label="" dir=both, fontsize="10", penwidth="2.4", arrowsize="0.8"];
-node4->node12 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
-node12->node14 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
-node14->node8 [label="" dir=both, fontsize="10", penwidth="2.4", arrowsize="0.8"];
-node14->node15 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
-node15->node16 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
+node6->node4 [label="" dir=both, fontsize="10", penwidth="2", arrowsize="0.8"];
+node4->node8 [label="" dir=both, fontsize="10", penwidth="2", arrowsize="0.8"];
+node6->node10 [label="" dir=both, fontsize="10", penwidth="2", arrowsize="0.8"];
+node4->node12 [label="" fontsize="10", penwidth="1", arrowsize="0.8"];
+node12->node14 [label="" fontsize="10", penwidth="1", arrowsize="0.8"];
+node14->node8 [label="" dir=both, fontsize="10", penwidth="2", arrowsize="0.8"];
+node14->node15 [label="" fontsize="10", penwidth="1", arrowsize="0.8"];
+node15->node16 [label="" fontsize="10", penwidth="1", arrowsize="0.8"];
 }

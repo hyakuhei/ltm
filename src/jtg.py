@@ -2,7 +2,7 @@ import json, subprocess, sys
 
 from util import search, Dot
 
-#This is ugly
+#XXX: This is ugly
 ARCH = "High Level Architecture"
 
 def drawRecursiveBoundaries(doc, boundaryKey, graph, drawnBoundaries=None):
@@ -31,7 +31,7 @@ def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True, printLabels
     _STYLES = {
         'boundary':'color="Red"',
         'node':'shape="Box"',
-        'link':'fontsize="10"'
+        'link':'fontsize="22"'
     }
 
     graphContainer = graph.newSubgraph(sceneName, style='color="Black"')
@@ -71,7 +71,7 @@ def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True, printLabels
             flowLabel = flowLabel + flow["data"]
 
         link = graph.newLink(
-            drawnActors[flow["from"]], drawnActors[flow["to"]], label=flowLabel
+            drawnActors[flow["from"]], drawnActors[flow["to"]], label=flowLabel, style='fontsize="14",penwidth="1.2",arrowsize="0.8"'
         )
 
     return graph
