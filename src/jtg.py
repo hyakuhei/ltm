@@ -135,11 +135,13 @@ def main(generateArchDiagram=True,markdown=False):
                 ["dot", "-s100", "-Tpng", f"{fileName}.dot", f"-o{fileName}.png"], shell=False
             )
 
-            if markdown:
+            if markdown and sceneName != ARCH:
                 print(f"## {sceneName}")
                 print(f"![{sceneName}]({fileName}.png)")
-                for flow in scene:
-                    print(flow)
+                print("| From | To | Data |")
+                print("| ---- | -- | ---- |")
+                for flow in scene[sceneName]:
+                    print(f"| {flow['from']} | {flow['to']} | {flow['data']} |")
 
 
 if __name__ == "__main__":
