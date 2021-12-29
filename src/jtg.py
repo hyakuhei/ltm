@@ -63,7 +63,7 @@ def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True, printLabels
 
         linkCounter += 1
 
-        flowLabel = "WAA"
+        flowLabel = ""
         if linkCounters == True:
             flowLabel = f"{linkCounter}."
         
@@ -109,7 +109,7 @@ def prepDoc(doc):
         path = search(doc["boundaries"], actor)
     return doc
 
-def main(generateArchDiagram=True, markdown=False, printLabels=False):
+def main(generateArchDiagram=True, markdown=False, printLabels=False, linkCounters=True):
     doc = json.loads(sys.stdin.read())
     doc = prepDoc(doc)
     graph = None
@@ -120,7 +120,7 @@ def main(generateArchDiagram=True, markdown=False, printLabels=False):
 
     for scene in doc["scenes"]:
         for sceneName in scene.keys():
-            graph = genGraph(doc, sceneName, printLabels=printLabels)
+            graph = genGraph(doc, sceneName, linkCounters=linkCounters, printLabels=printLabels)
 
             fileName = f"output/{sceneName}"
             with open(f"{fileName}.dot", "w") as f:
@@ -147,4 +147,22 @@ def main(generateArchDiagram=True, markdown=False, printLabels=False):
 
 if __name__ == "__main__":
     #TODO argument handling
-    main(generateArchDiagram=True, markdown=True, printLabels=False)
+
+    parms = {
+        'generateArchDiagram':False,
+        'markdown':False,
+        'printLabels':False,
+        'linkCounters':False
+
+    }
+
+    if "-arch" in sys.argv:
+        parms['generateArchDiagram'] = True
+    if "-markdown" in sys.argv:
+        parms['markdown'] = True
+    if "-label" in sys.argv:
+        parms["printLabels"] = True
+    if "-number" in sys.argv:
+        parms["linkCounters"] = True
+
+    main(**parms)
