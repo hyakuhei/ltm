@@ -1,5 +1,6 @@
 digraph G {
 compound=true;
+rankdir="LR"
     subgraph cluster1 {
     label="User lists books";
     color="Black";
@@ -9,22 +10,22 @@ compound=true;
             subgraph cluster3 {
             label="FE VPC";
             color="Coral1";
-                node4 [label="Nginx" shape="box", margin="0.1", color="Grey"];
+                node4 [label="Nginx" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
             }
         }
         subgraph cluster5 {
         label="Internet";
         color="Coral1";
-            node6 [label="client" shape="box", margin="0.1", color="Grey"];
+            node6 [label="client" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
         }
         subgraph cluster7 {
         label="OCI";
         color="Coral1";
-            node8 [label="Database" shape="box", margin="0.1", color="Grey"];
+            node8 [label="Database" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
         }
     }
-node6->node4 [label="1." fontsize="14",penwidth="1.2",arrowsize="0.8"];
-node4->node8 [label="2." fontsize="14",penwidth="1.2",arrowsize="0.8"];
-node8->node4 [label="3." fontsize="14",penwidth="1.2",arrowsize="0.8"];
-node4->node6 [label="4." fontsize="14",penwidth="1.2",arrowsize="0.8"];
+node6->node4 [label="1." fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
+node4->node8 [label="2." fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
+node8->node4 [label="3." fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
+node4->node6 [label="4." fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
 }

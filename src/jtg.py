@@ -30,8 +30,8 @@ def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True, printLabels
 
     _STYLES = {
         'boundary':'color="Red"',
-        'node':'shape="Box"',
-        'link':'fontsize="22"'
+        'node':'shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"',
+        'link':'fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"'
     }
 
     graphContainer = graph.newSubgraph(sceneName, style='color="Black"')
@@ -59,7 +59,7 @@ def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True, printLabels
 
                             parentBoundary = drawnBoundaries[key]
 
-                drawnActors[actor] = graph.newNode(actor, parent=parentBoundary)
+                drawnActors[actor] = graph.newNode(actor, parent=parentBoundary, style=_STYLES['node'])
 
         linkCounter += 1
 
@@ -71,7 +71,7 @@ def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True, printLabels
             flowLabel = flowLabel + flow["data"]
 
         link = graph.newLink(
-            drawnActors[flow["from"]], drawnActors[flow["to"]], label=flowLabel, style='fontsize="14",penwidth="1.2",arrowsize="0.8"'
+            drawnActors[flow["from"]], drawnActors[flow["to"]], label=flowLabel, style=_STYLES['link']
         )
 
     return graph

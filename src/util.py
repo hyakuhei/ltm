@@ -178,6 +178,7 @@ class Dot:
 
         dotStrings.append("digraph G {")
         dotStrings.append("compound=true;")
+        dotStrings.append('rankdir="LR"')
 
         for sub in [x for x in self._subgraphs if x["parent"] == None]:
             self.recurse(sub, dotStrings)
