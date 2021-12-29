@@ -169,13 +169,30 @@ if __name__ == "__main__":
         "linkCounters": False,
     }
 
+    if "-h" in sys.argv:
+        print("""
+        Generate architecture diagrams and markdown reports from JSON files
+
+        -h \t\t Print this help
+        -arch \t\t Generate a summary high level architeciture diagram from the supplied scenes
+        -markdown \t Generate Markdown output that inlcudes generated diagrams
+        -label \t\t Include data strings in edge labels
+        -number \t Number each dataflow
+        """)
+        sys.exit(0)
+
     if "-arch" in sys.argv:
         parms["generateArchDiagram"] = True
+    
     if "-markdown" in sys.argv:
         parms["markdown"] = True
+    
     if "-label" in sys.argv:
         parms["printLabels"] = True
+    
     if "-number" in sys.argv:
-        parms["linkCounters"] = True
-
+        parms["linkCounters"] = True 
+    
     main(**parms)
+
+    
