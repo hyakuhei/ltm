@@ -1,43 +1,44 @@
 digraph G {
 compound=true;
+rankdir="LR"
     subgraph cluster1 {
     label="High Level Architecture";
     color="Black";
-        node16 [label="DHL" shape="box", margin="0.1", color="Grey"];
+        node16 [label="DHL" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
         subgraph cluster2 {
         label="AWS";
         color="Coral1";
             subgraph cluster3 {
             label="FE VPC";
             color="Coral1";
-                node4 [label="Nginx" shape="box", margin="0.1", color="Grey"];
+                node4 [label="Nginx" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
             }
             subgraph cluster11 {
             label="Backend VPC";
             color="Coral1";
-                node12 [label="Ordering" shape="box", margin="0.1", color="Grey"];
+                node12 [label="Ordering" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
             }
         }
         subgraph cluster5 {
         label="Internet";
         color="Coral1";
-            node6 [label="client" shape="box", margin="0.1", color="Grey"];
+            node6 [label="client" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
         }
         subgraph cluster7 {
         label="OCI";
         color="Coral1";
-            node8 [label="Database" shape="box", margin="0.1", color="Grey"];
+            node8 [label="Database" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
         }
         subgraph cluster9 {
         label="Google Cloud";
         color="Coral1";
-            node10 [label="GoogleOauth" shape="box", margin="0.1", color="Grey"];
+            node10 [label="GoogleOauth" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
         }
         subgraph cluster13 {
         label="Warehouse Systems";
         color="Coral1";
-            node14 [label="Warehouse" shape="box", margin="0.1", color="Grey"];
-            node15 [label="Shipping" shape="box", margin="0.1", color="Grey"];
+            node14 [label="Warehouse" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+            node15 [label="Shipping" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
         }
     }
 node6->node4 [label="" dir=both, fontsize="10", penwidth="2.4", arrowsize="0.8"];

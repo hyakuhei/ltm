@@ -2,7 +2,7 @@ import json, subprocess, sys
 
 from util import search, Dot
 
-#This is ugly
+#XXX: This is ugly
 ARCH = "High Level Architecture"
 
 def drawRecursiveBoundaries(doc, boundaryKey, graph, drawnBoundaries=None):
@@ -13,7 +13,7 @@ def drawRecursiveBoundaries(doc, boundaryKey, graph, drawnBoundaries=None):
 
 
 # TODO: Smartlinks
-def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True):
+def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True, printLabels=True):
 
     sceneToDraw = None
     for sceneDict in doc["scenes"]:
@@ -28,15 +28,10 @@ def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True):
     drawnActors = {}
     linkCounter = 0
 
-    # Left over from GvGen - need to implement some type of stying.
-    # graph.styleAppend("Boundary", "color", "red")
-    # graph.styleAppend("Actor", "shape", "box")
-    # graph.styleAppend("Flow", "fontsize", 10)
-
     _STYLES = {
         'boundary':'color="Red"',
-        'node':'shape="Box"',
-        'link':'fontsize="10"'
+        'node':'shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"',
+        'link':'fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"'
     }
 
     graphContainer = graph.newSubgraph(sceneName, style='color="Black"')
@@ -64,16 +59,20 @@ def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True):
 
                             parentBoundary = drawnBoundaries[key]
 
-                drawnActors[actor] = graph.newNode(actor, parent=parentBoundary)
+                drawnActors[actor] = graph.newNode(actor, parent=parentBoundary, style=_STYLES['node'])
 
         linkCounter += 1
-        flowLabel = (
-            flow["data"] if linkCounters == False else f"{linkCounter} {flow['data']}"
-        )
+
+        flowLabel = "WAA"
+        if linkCounters == True:
+            flowLabel = f"{linkCounter}."
+        
+        if printLabels == True:
+            flowLabel = flowLabel + flow["data"]
+
         link = graph.newLink(
-            drawnActors[flow["from"]], drawnActors[flow["to"]], label=flowLabel
+            drawnActors[flow["from"]], drawnActors[flow["to"]], label=flowLabel, style=_STYLES['link']
         )
-        # graph.styleApply("Flow", link)
 
     return graph
 
@@ -93,7 +92,7 @@ def addArchScene(doc):
     for f in archFlows:  # f is a tuple (from, to)
         d[ARCH].append({"from": f[0], "to": f[1], "data": ""})
 
-    doc["scenes"].append(d)
+    doc["scenes"].insert(0, d)
     return doc
 
 
@@ -110,19 +109,18 @@ def prepDoc(doc):
         path = search(doc["boundaries"], actor)
     return doc
 
-
-def main(generateArchDiagram=True,markdown=False):
+def main(generateArchDiagram=True, markdown=False, printLabels=False):
     doc = json.loads(sys.stdin.read())
     doc = prepDoc(doc)
     graph = None
 
+    scenes = doc['scenes']
     if generateArchDiagram == True:  # TODO: Make this a command line argument
         doc = addArchScene(doc)  # adds an ARCH scene to the doc
-        doc["scenes"] # Arch scene is just all of the existing scenes, bundled into one big one and run with compoundLinks
 
     for scene in doc["scenes"]:
         for sceneName in scene.keys():
-            graph = genGraph(doc, sceneName)
+            graph = genGraph(doc, sceneName, printLabels=printLabels)
 
             fileName = f"output/{sceneName}"
             with open(f"{fileName}.dot", "w") as f:
@@ -132,16 +130,21 @@ def main(generateArchDiagram=True,markdown=False):
                     f.write(graph.dot())
 
             _ = subprocess.run(
-                ["dot", "-s100", "-Tpng", f"{fileName}.dot", f"-o{fileName}.png"]
+                ["dot", "-s100", "-Tpng", f"{fileName}.dot", f"-o{fileName}.png"], shell=False
             )
 
             if markdown:
                 print(f"## {sceneName}")
-                print(f"![{sceneName}]({fileName}.png)")
-                for flow in scene:
-                    print(flow)
+                print(f"![{sceneName}]({fileName.replace(' ', '%20')}.png)")
+                if sceneName != ARCH:
+                    print("| Id | From | To | Data |")
+                    print("| -- | ---- | -- | ---- |")
+                    ctr = 1
+                    for flow in scene[sceneName]:
+                        print(f"| {ctr} | {flow['from']} | {flow['to']} | {flow['data']} |")
+                        ctr+=1 
 
 
 if __name__ == "__main__":
     #TODO argument handling
-    main(generateArchDiagram=True, markdown=True)
+    main(generateArchDiagram=True, markdown=True, printLabels=False)

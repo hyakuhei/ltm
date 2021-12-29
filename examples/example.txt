@@ -1,0 +1,1 @@
+cat bookstore.ltm| python3 ../src/ltm.py| python3 ../src/jtg.py > report.md
