@@ -58,7 +58,9 @@ class Dot:
         2. A subgraph can only belong to 0..1 subgraphs
         """
 
-    def newSubgraph(self, label: str = "", parent: dict = None, style: str = 'color="Coral1"') -> dict:
+    def newSubgraph(
+        self, label: str = "", parent: dict = None, style: str = 'color="Coral1"'
+    ) -> dict:
         """Create a new subgraph
 
         Args:
@@ -78,12 +80,17 @@ class Dot:
             "label": label,
             "parent": parent,
             "nodetype": "subgraph",
-            "style":style
+            "style": style,
         }
         self._subgraphs.append(newSub)
         return newSub
 
-    def newNode(self, label: str = "", parent: dict = None, style: str = 'shape="box", margin="0.1", color="Grey"') -> dict:
+    def newNode(
+        self,
+        label: str = "",
+        parent: dict = None,
+        style: str = 'shape="box", margin="0.1", color="Grey"',
+    ) -> dict:
         """Create a new node
 
         Args:
@@ -103,12 +110,18 @@ class Dot:
             "label": label,
             "parent": parent,
             "nodetype": "node",
-            "style":style
+            "style": style,
         }
         self._nodes.append(node)
         return node
 
-    def newLink(self, nodeA: dict, nodeB: dict, label: str = "", style: str = 'fontsize="10",penwidth="1.2",arrowsize="0.8"') -> dict:
+    def newLink(
+        self,
+        nodeA: dict,
+        nodeB: dict,
+        label: str = "",
+        style: str = 'fontsize="10",penwidth="1.2",arrowsize="0.8"',
+    ) -> dict:
         """Create a new link between nodes or subgraphs
 
         Creates a directional link from nodeA to nodeB
@@ -161,7 +174,9 @@ class Dot:
             s.append(f"{tab*depth}{closeBrace}")
 
         if item["nodetype"] == "node":
-            s.append(f'{tab*depth}node{item["id"]} [label="{item["label"]}" {item["style"]}];')
+            s.append(
+                f'{tab*depth}node{item["id"]} [label="{item["label"]}" {item["style"]}];'
+            )
 
     def dot(self, compoundLinks=False) -> str:
         """Generate a string of the dot graph

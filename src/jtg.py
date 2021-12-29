@@ -2,8 +2,9 @@ import json, subprocess, sys
 
 from util import search, Dot
 
-#XXX: This is ugly
+# XXX: This is ugly
 ARCH = "High Level Architecture"
+
 
 def drawRecursiveBoundaries(doc, boundaryKey, graph, drawnBoundaries=None):
     if drawnBoundaries is None:
@@ -29,9 +30,9 @@ def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True, printLabels
     linkCounter = 0
 
     _STYLES = {
-        'boundary':'color="Red"',
-        'node':'shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"',
-        'link':'fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"'
+        "boundary": 'color="Red"',
+        "node": 'shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"',
+        "link": 'fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"',
     }
 
     graphContainer = graph.newSubgraph(sceneName, style='color="Black"')
@@ -59,19 +60,24 @@ def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True, printLabels
 
                             parentBoundary = drawnBoundaries[key]
 
-                drawnActors[actor] = graph.newNode(actor, parent=parentBoundary, style=_STYLES['node'])
+                drawnActors[actor] = graph.newNode(
+                    actor, parent=parentBoundary, style=_STYLES["node"]
+                )
 
         linkCounter += 1
 
-        flowLabel = "WAA"
+        flowLabel = ""
         if linkCounters == True:
             flowLabel = f"{linkCounter}."
-        
+
         if printLabels == True:
             flowLabel = flowLabel + flow["data"]
 
         link = graph.newLink(
-            drawnActors[flow["from"]], drawnActors[flow["to"]], label=flowLabel, style=_STYLES['link']
+            drawnActors[flow["from"]],
+            drawnActors[flow["to"]],
+            label=flowLabel,
+            style=_STYLES["link"],
         )
 
     return graph
@@ -109,18 +115,23 @@ def prepDoc(doc):
         path = search(doc["boundaries"], actor)
     return doc
 
-def main(generateArchDiagram=True, markdown=False, printLabels=False):
+
+def main(
+    generateArchDiagram=True, markdown=False, printLabels=False, linkCounters=True
+):
     doc = json.loads(sys.stdin.read())
     doc = prepDoc(doc)
     graph = None
 
-    scenes = doc['scenes']
+    scenes = doc["scenes"]
     if generateArchDiagram == True:  # TODO: Make this a command line argument
         doc = addArchScene(doc)  # adds an ARCH scene to the doc
 
     for scene in doc["scenes"]:
         for sceneName in scene.keys():
-            graph = genGraph(doc, sceneName, printLabels=printLabels)
+            graph = genGraph(
+                doc, sceneName, linkCounters=linkCounters, printLabels=printLabels
+            )
 
             fileName = f"output/{sceneName}"
             with open(f"{fileName}.dot", "w") as f:
@@ -130,7 +141,8 @@ def main(generateArchDiagram=True, markdown=False, printLabels=False):
                     f.write(graph.dot())
 
             _ = subprocess.run(
-                ["dot", "-s100", "-Tpng", f"{fileName}.dot", f"-o{fileName}.png"], shell=False
+                ["dot", "-s100", "-Tpng", f"{fileName}.dot", f"-o{fileName}.png"],
+                shell=False,
             )
 
             if markdown:
@@ -141,10 +153,46 @@ def main(generateArchDiagram=True, markdown=False, printLabels=False):
                     print("| -- | ---- | -- | ---- |")
                     ctr = 1
                     for flow in scene[sceneName]:
-                        print(f"| {ctr} | {flow['from']} | {flow['to']} | {flow['data']} |")
-                        ctr+=1 
+                        print(
+                            f"| {ctr} | {flow['from']} | {flow['to']} | {flow['data']} |"
+                        )
+                        ctr += 1
 
 
 if __name__ == "__main__":
-    #TODO argument handling
-    main(generateArchDiagram=True, markdown=True, printLabels=False)
+    # TODO argument handling
+
+    parms = {
+        "generateArchDiagram": False,
+        "markdown": False,
+        "printLabels": False,
+        "linkCounters": False,
+    }
+
+    if "-h" in sys.argv:
+        print("""
+        Generate architecture diagrams and markdown reports from JSON files
+
+        -h \t\t Print this help
+        -arch \t\t Generate a summary high level architeciture diagram from the supplied scenes
+        -markdown \t Generate Markdown output that inlcudes generated diagrams
+        -label \t\t Include data strings in edge labels
+        -number \t Number each dataflow
+        """)
+        sys.exit(0)
+
+    if "-arch" in sys.argv:
+        parms["generateArchDiagram"] = True
+    
+    if "-markdown" in sys.argv:
+        parms["markdown"] = True
+    
+    if "-label" in sys.argv:
+        parms["printLabels"] = True
+    
+    if "-number" in sys.argv:
+        parms["linkCounters"] = True 
+    
+    main(**parms)
+
+    

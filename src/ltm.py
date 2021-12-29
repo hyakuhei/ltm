@@ -21,7 +21,18 @@ grammar = """
 
     STRING: ESCAPED_STRING
 
-    %import common.WORD
+    //
+    // Names (Variables)
+    //
+    LCASE_LETTER: "a".."z"
+    UCASE_LETTER: "A".."Z"
+    DELIM_CHAR: ("/"|"-"|"_")
+
+
+    LETTER: UCASE_LETTER | LCASE_LETTER | DELIM_CHAR | DIGIT
+    WORD: LETTER+
+
+    %import common.DIGIT
     %import common.ESCAPED_STRING
     %import common.WS
 
