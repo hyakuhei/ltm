@@ -29,6 +29,9 @@ Dataflows can also contain protocol information, described as 'protocol("data")'
 Protocols can also be nested e.g:
 ```server client: IP(TLS(HTTP(HTML("index"))))```
 
+Actors in data flows can be given optional descriptive text:
+```describe bob: "Bob is a human that loves to eat apples"```
+
 Boundaries can be declared before, or after scenes.
 
 ## The LTM process

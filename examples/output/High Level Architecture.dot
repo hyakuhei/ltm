@@ -6,33 +6,33 @@ rankdir="LR"
     color="Black";
         node16 [label="DHL" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
         subgraph cluster2 {
-        label="AWS";
-        color="Coral1";
-            subgraph cluster3 {
-            label="FE VPC";
-            color="Coral1";
-                node4 [label="Nginx" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
-            }
-            subgraph cluster11 {
-            label="Backend VPC";
-            color="Coral1";
-                node12 [label="Ordering" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
-            }
-        }
-        subgraph cluster5 {
         label="Internet";
         color="Coral1";
             node6 [label="client" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+            subgraph cluster3 {
+            label="AWS";
+            color="Coral1";
+                subgraph cluster4 {
+                label="FE VPC";
+                color="Coral1";
+                    node5 [label="Nginx" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+                }
+                subgraph cluster11 {
+                label="Backend VPC";
+                color="Coral1";
+                    node12 [label="Ordering" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+                }
+            }
+            subgraph cluster9 {
+            label="Google Cloud";
+            color="Coral1";
+                node10 [label="GoogleOauth" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+            }
         }
         subgraph cluster7 {
         label="OCI";
         color="Coral1";
             node8 [label="Database" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
-        }
-        subgraph cluster9 {
-        label="Google Cloud";
-        color="Coral1";
-            node10 [label="GoogleOauth" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
         }
         subgraph cluster13 {
         label="Warehouse Systems";
@@ -41,10 +41,10 @@ rankdir="LR"
             node15 [label="Shipping" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
         }
     }
-node6->node4 [label="" dir=both, fontsize="10", penwidth="2.4", arrowsize="0.8"];
-node4->node8 [label="" dir=both, fontsize="10", penwidth="2.4", arrowsize="0.8"];
+node6->node5 [label="" dir=both, fontsize="10", penwidth="2.4", arrowsize="0.8"];
+node5->node8 [label="" dir=both, fontsize="10", penwidth="2.4", arrowsize="0.8"];
 node6->node10 [label="" dir=both, fontsize="10", penwidth="2.4", arrowsize="0.8"];
-node4->node12 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
+node5->node12 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
 node12->node14 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
 node14->node8 [label="" dir=both, fontsize="10", penwidth="2.4", arrowsize="0.8"];
 node14->node15 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
