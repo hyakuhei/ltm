@@ -149,8 +149,8 @@ def main(
                 print(f"## {sceneName}")
                 print(f"![{sceneName}]({fileName.replace(' ', '%20')}.png)")
                 if sceneName != ARCH:
-                    print("| Id | From | To | Data |")
-                    print("| -- | ---- | -- | ---- |")
+                    print("\n| Id | From | To | Data |")
+                    print("| --- | ---- | --- | ---- |")
                     ctr = 1
                     for flow in scene[sceneName]:
                         print(
