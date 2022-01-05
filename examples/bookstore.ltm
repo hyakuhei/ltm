@@ -4,6 +4,10 @@ Nginx Database: SQL("All book titles")
 Database Nginx: "Titles"
 Nginx client: HTTP(HTML("Books"))
 
+describe client: "A web browser used by the customer"
+describe Nginx: "A web proxy used to manage inbound traffic, perform TLS termination"
+describe Database: "Oracle Exadata database, holding most state of the overall application"
+
 scene: "User login"
 client Nginx: HTTP("GET /login")
 Nginx client: HTTP("302 Google Oauth")
@@ -30,4 +34,4 @@ boundary "FE VPC": Nginx
 boundary "Backend VPC": Ordering
 boundary "AWS": "FE VPC" "Backend VPC"
 
-nest "Internet": "Google Cloud" "AWS"
+boundary "Internet": "Google Cloud" "AWS"

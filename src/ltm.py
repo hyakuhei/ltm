@@ -1,10 +1,13 @@
 grammar = """
     start: command+
 
-    command: dataflow   
+    command: describe   
            | scene      
            | boundary
-           | nest
+           | dataflow
+
+           
+    describe: "describe" SPACE WORD ":" SPACE ESCAPED_STRING
 
     boundary: "boundary" SPACE ESCAPED_STRING ":" [ WORD+ | ESCAPED_STRING+ ]
 
@@ -13,7 +16,6 @@ grammar = """
     catcher: WORD
     flow: ESCAPED_STRING
     protocol: WORD "(" [ protocol | flow ]")"
-    nest: "nest" SPACE ESCAPED_STRING ":" ESCAPED_STRING+
 
     scene: "scene:"[SPACE]ESCAPED_STRING
 
@@ -68,12 +70,15 @@ class MyVisitor(Visitor_Recursive):
             doc["actors"][str(tree.children[0])] = {}
 
     def pitcher(self, tree):
+        """Visitor Function"""
         self._addActor(tree)
 
     def catcher(self, tree):
+        """Visitor Function"""
         self._addActor(tree)
 
     def scene(self, tree):
+        """Visitor Function"""
         sceneName = str(tree.children[1]).strip('"\\')
         globalContext["currentScene"] = sceneName
         if sceneName not in _sceneMap:
@@ -82,6 +87,24 @@ class MyVisitor(Visitor_Recursive):
             _sceneMap[sceneName] = scene[
                 sceneName
             ]  # Look up the right scene in the [] of scenes
+
+    def describe(self, tree):
+        """Visitor Function"""
+        #print(f"Visited {tree}")
+
+        describedActor = None
+
+        for child in tree.children:
+            if child.type == "WS":
+                continue
+            if child.type == "WORD":
+                # This is the name of the actor we wish to describe
+                assert describedActor is None
+                assert str(child) in doc["actors"]
+                describedActor = doc["actors"][str(child)]
+            if child.type == "ESCAPED_STRING":
+                assert describedActor is not None
+                describedActor['description'] = str(child).strip('"\\')
 
     def dataflow(self, tree):
         flow = {}
@@ -165,7 +188,6 @@ class MyVisitor(Visitor_Recursive):
 
     def nestBoundary(self, childKey: str, newParentKey: str):
         self._moveBoundary(childKey, newParentKey)
-        pass
 
     def boundary(self, tree):
         # print(tree.children)

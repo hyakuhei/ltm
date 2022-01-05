@@ -5,29 +5,29 @@ rankdir="LR"
     label="User login";
     color="Black";
         subgraph cluster2 {
-        label="AWS";
-        color="Coral1";
-            subgraph cluster3 {
-            label="FE VPC";
-            color="Coral1";
-                node4 [label="Nginx" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
-            }
-        }
-        subgraph cluster5 {
         label="Internet";
         color="Coral1";
             node6 [label="client" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
-        }
-        subgraph cluster7 {
-        label="Google Cloud";
-        color="Coral1";
-            node8 [label="GoogleOauth" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+            subgraph cluster3 {
+            label="AWS";
+            color="Coral1";
+                subgraph cluster4 {
+                label="FE VPC";
+                color="Coral1";
+                    node5 [label="Nginx" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+                }
+            }
+            subgraph cluster7 {
+            label="Google Cloud";
+            color="Coral1";
+                node8 [label="GoogleOauth" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+            }
         }
     }
-node6->node4 [label="1." fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
-node4->node6 [label="2." fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
+node6->node5 [label="1." fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
+node5->node6 [label="2." fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
 node6->node8 [label="3." fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
 node8->node6 [label="4." fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
-node6->node4 [label="5." fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
-node4->node6 [label="6." fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
+node6->node5 [label="5." fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
+node5->node6 [label="6." fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
 }

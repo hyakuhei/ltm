@@ -148,6 +148,13 @@ def main(
             if markdown:
                 print(f"## {sceneName}")
                 print(f"![{sceneName}]({fileName.replace(' ', '%20')}.png)")
+                if sceneName == ARCH and generateArchDiagram == True:
+                    print("\n| Actor | Description |")
+                    print("| --- | ---- |")
+                    for actor in doc["actors"].keys():
+                        print(f"| {actor} | {doc['actors'][actor]['description'] if 'description' in doc['actors'][actor] else '-'} |")
+                    print("\n")
+
                 if sceneName != ARCH:
                     print("\n| Id | From | To | Data |")
                     print("| --- | ---- | --- | ---- |")
@@ -157,7 +164,9 @@ def main(
                             f"| {ctr} | {flow['from']} | {flow['to']} | {flow['data']} |"
                         )
                         ctr += 1
+                    print("\n")
 
+                
 
 if __name__ == "__main__":
     # TODO argument handling
