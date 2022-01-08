@@ -16,6 +16,8 @@ GoogleOauth client: "Token"
 client Nginx: "Token"
 Nginx client: "Cookie"
 
+describe GoogleOauth: "Google Oauth IDP - **out of scope**"
+
 scene: "User buys book"
 client Nginx: "POST /buy?bookid=3"
 Nginx Ordering: "User X buys book3"
@@ -24,6 +26,10 @@ Warehouse Database: "Get address for customer X"
 Database Warehouse: "Customer address"
 Warehouse Shipping: "Prepare invoice for shipping to address"
 Shipping DHL: "Ship Order"
+
+describe Ordering: "Order processing microservice"
+describe Warehouse: "Warehouse processing microservice"
+describe DHL: "External Shipping Company"
 
 boundary "Internet": client
 boundary "OCI": Database

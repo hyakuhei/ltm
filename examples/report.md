@@ -3,13 +3,13 @@
 
 | Actor | Description |
 | --- | ---- |
-| DHL | - |
+| DHL | External Shipping Company |
 | Database | Oracle Exadata database, holding most state of the overall application |
-| GoogleOauth | - |
+| GoogleOauth | Google Oauth IDP - **out of scope** |
 | Nginx | A web proxy used to manage inbound traffic, perform TLS termination |
-| Ordering | - |
+| Ordering | Order processing microservice |
 | Shipping | - |
-| Warehouse | - |
+| Warehouse | Warehouse processing microservice |
 | client | A web browser used by the customer |
 
 

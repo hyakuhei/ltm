@@ -1,23 +1,28 @@
 digraph G {
 compound=true;
-rankdir="LR"
+rankdir="LR";
     subgraph cluster1 {
+    rankdir="TB";
     label="User buys book";
     color="Black";
         node14 [label="DHL" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
         subgraph cluster2 {
+        rankdir="TB";
         label="Internet";
         color="Coral1";
             node6 [label="client" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
             subgraph cluster3 {
+            rankdir="TB";
             label="AWS";
             color="Coral1";
                 subgraph cluster4 {
+                rankdir="TB";
                 label="FE VPC";
                 color="Coral1";
                     node5 [label="Nginx" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
                 }
                 subgraph cluster7 {
+                rankdir="TB";
                 label="Backend VPC";
                 color="Coral1";
                     node8 [label="Ordering" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
@@ -25,12 +30,14 @@ rankdir="LR"
             }
         }
         subgraph cluster9 {
+        rankdir="TB";
         label="Warehouse Systems";
         color="Coral1";
             node10 [label="Warehouse" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
             node13 [label="Shipping" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
         }
         subgraph cluster11 {
+        rankdir="TB";
         label="OCI";
         color="Coral1";
             node12 [label="Database" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];

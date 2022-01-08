@@ -6,7 +6,6 @@
 
 from typing import Union
 
-
 def search(parent: dict, searchValue, path: list = None):
     """Search through nested dictionaries and lists looking for a value.
 
@@ -160,6 +159,7 @@ class Dot:
         if item["nodetype"] == "subgraph":
             # Write the opening for this subgraph
             s.append(f"{tab*depth}subgraph cluster{item['id']} {openBrace}")
+            s.append(f'{tab*depth}rankdir="TB";')
             s.append(f'{tab*depth}label="{item["label"]}";')
             s.append(f'{tab*depth}{item["style"]};')
 
@@ -193,7 +193,7 @@ class Dot:
 
         dotStrings.append("digraph G {")
         dotStrings.append("compound=true;")
-        dotStrings.append('rankdir="LR"')
+        dotStrings.append('rankdir="LR";')
 
         for sub in [x for x in self._subgraphs if x["parent"] == None]:
             self.recurse(sub, dotStrings)
