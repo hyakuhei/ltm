@@ -41,3 +41,6 @@ boundary "Backend VPC": Ordering
 boundary "AWS": "FE VPC" "Backend VPC"
 
 boundary "Internet": "Google Cloud" "AWS"
+
+include dhl.ltm
+

@@ -6,6 +6,7 @@ rankdir="LR";
     label="High Level Architecture";
     color="Black";
         node16 [label="DHL" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+        node17 [label="Driver" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
         subgraph cluster2 {
         rankdir="TB";
         label="Internet";
@@ -57,4 +58,5 @@ node12->node14 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
 node14->node8 [label="" dir=both, fontsize="10", penwidth="2.4", arrowsize="0.8"];
 node14->node15 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
 node15->node16 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
+node16->node17 [label="" fontsize="10", penwidth="1.2", arrowsize="0.8"];
 }
