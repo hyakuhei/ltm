@@ -1,0 +1,9 @@
+
+describe client: "A web browser used by the customer"
+describe Nginx: "A web proxy used to manage inbound traffic, perform TLS termination"
+describe Database: "Oracle Exadata database, holding most state of the overall application"
+describe GoogleOauth: "Google Oauth IDP - **out of scope**"
+describe Ordering: "Order processing microservice"
+describe Warehouse: "Warehouse processing microservice"
+describe DHL: "External Shipping Company"
+describe Driver: "Van driver"

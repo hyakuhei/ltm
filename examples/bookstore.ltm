@@ -4,10 +4,6 @@ Nginx Database: SQL("All book titles")
 Database Nginx: "Titles"
 Nginx client: HTTP(HTML("Books"))
 
-describe client: "A web browser used by the customer"
-describe Nginx: "A web proxy used to manage inbound traffic, perform TLS termination"
-describe Database: "Oracle Exadata database, holding most state of the overall application"
-
 scene: "User login"
 client Nginx: HTTP("GET /login")
 Nginx client: HTTP("302 Google Oauth")
@@ -15,8 +11,6 @@ client GoogleOauth: "Request Token"
 GoogleOauth client: "Token"
 client Nginx: "Token"
 Nginx client: "Cookie"
-
-describe GoogleOauth: "Google Oauth IDP - **out of scope**"
 
 scene: "User buys book"
 client Nginx: "POST /buy?bookid=3"
@@ -26,10 +20,6 @@ Warehouse Database: "Get address for customer X"
 Database Warehouse: "Customer address"
 Warehouse Shipping: "Prepare invoice for shipping to address"
 Shipping DHL: "Ship Order"
-
-describe Ordering: "Order processing microservice"
-describe Warehouse: "Warehouse processing microservice"
-describe DHL: "External Shipping Company"
 
 boundary "Internet": client
 boundary "OCI": Database
@@ -44,3 +34,4 @@ boundary "Internet": "Google Cloud" "AWS"
 
 include dhl.ltm
 
+include bookstore-descriptions.ltm

@@ -5,7 +5,7 @@
 | --- | ---- |
 | DHL | External Shipping Company |
 | Database | Oracle Exadata database, holding most state of the overall application |
-| Driver | - |
+| Driver | Van driver |
 | GoogleOauth | Google Oauth IDP - **out of scope** |
 | Nginx | A web proxy used to manage inbound traffic, perform TLS termination |
 | Ordering | Order processing microservice |
