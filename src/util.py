@@ -6,6 +6,22 @@
 
 from typing import Union
 
+# Should we just rely on Posix DAC and not be too smart here?
+def safeFileRead(path: str, ext: str = ".ltm") ->str:
+    """Safely include other ltm files"""
+    # Files must end in .ltm
+    # Files must be local (no windering off into /etc/ ...)
+    #TODO: Think more about this, it'll do for now though.
+    path = path.strip()
+    if not path.endswith(ext):
+        print("Invalid include")
+        return ""
+
+    with open(path, 'r') as f:
+        return f.read()
+    
+
+
 def search(parent: dict, searchValue, path: list = None):
     """Search through nested dictionaries and lists looking for a value.
 

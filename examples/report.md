@@ -5,6 +5,7 @@
 | --- | ---- |
 | DHL | External Shipping Company |
 | Database | Oracle Exadata database, holding most state of the overall application |
+| Driver | - |
 | GoogleOauth | Google Oauth IDP - **out of scope** |
 | Nginx | A web proxy used to manage inbound traffic, perform TLS termination |
 | Ordering | Order processing microservice |
@@ -49,5 +50,13 @@
 | 5 | Database | Warehouse | Customer address |
 | 6 | Warehouse | Shipping | Prepare invoice for shipping to address |
 | 7 | Shipping | DHL | Ship Order |
+
+
+## Order Received
+![Order Received](output/Order%20Received.png)
+
+| Id | From | To | Data |
+| --- | ---- | --- | ---- |
+| 1 | DHL | Driver | Collection Order |
 
 

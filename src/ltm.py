@@ -1,13 +1,15 @@
 grammar = """
     start: command+
 
-    command: describe   
+    command: describe
+           | include 
            | scene      
            | boundary
            | dataflow
-
            
     describe: "describe" SPACE WORD ":" SPACE ESCAPED_STRING
+
+    include: "include" SPACE WORD
 
     boundary: "boundary" SPACE ESCAPED_STRING ":" [ WORD+ | ESCAPED_STRING+ ]
 
@@ -28,7 +30,7 @@ grammar = """
     //
     LCASE_LETTER: "a".."z"
     UCASE_LETTER: "A".."Z"
-    DELIM_CHAR: ("/"|"-"|"_")
+    DELIM_CHAR: ("/"|"-"|"_"|".")
 
 
     LETTER: UCASE_LETTER | LCASE_LETTER | DELIM_CHAR | DIGIT
@@ -49,6 +51,8 @@ from deepdiff import DeepDiff
 
 from lark import Lark
 from lark.visitors import Visitor_Recursive
+
+import util
 
 parser = Lark(grammar)
 
@@ -76,6 +80,10 @@ class MyVisitor(Visitor_Recursive):
     def catcher(self, tree):
         """Visitor Function"""
         self._addActor(tree)
+
+    def include(self, tree):
+        """Visitor Function"""
+        pass
 
     def scene(self, tree):
         """Visitor Function"""
@@ -241,7 +249,17 @@ def test():
 
 
 def main():
-    parseTree = parser.parse(sys.stdin.read())
+    preparse = []
+    for s in sys.stdin.readlines():
+        if s.startswith("include"):
+            path = s.split(" ")[-1]
+            preparse.append(util.safeFileRead(path))
+        else:
+            preparse.append(s)
+    
+    preParsedString = "".join(preparse)
+
+    parseTree = parser.parse(preParsedString)
     MyVisitor().visit_topdown(parseTree)
     print(json.dumps(doc, indent=4, sort_keys=True), end="")
 
