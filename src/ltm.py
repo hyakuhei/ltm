@@ -1,6 +1,6 @@
 grammar = """
     start: command+
-
+    
     command: describe
            | include 
            | scene      
@@ -39,8 +39,12 @@ grammar = """
     %import common.DIGIT
     %import common.ESCAPED_STRING
     %import common.WS
+    %import common.CPP_COMMENT
+    %import common.C_COMMENT
 
     %ignore WS
+    %ignore CPP_COMMENT
+    %ignore C_COMMENT
 """
 
 import json

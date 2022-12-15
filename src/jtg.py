@@ -178,7 +178,7 @@ if __name__ == "__main__":
         "linkCounters": False,
     }
 
-    if "-h" in sys.argv:
+    if "-h" in sys.argv or "--help" in sys.argv:
         print("""
         Generate architecture diagrams and markdown reports from JSON files
 
