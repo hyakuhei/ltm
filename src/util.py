@@ -6,6 +6,9 @@
 
 from typing import Union
 
+#Use the graphviz library to do the actual image rendering only.
+import graphviz 
+
 # Should we just rely on Posix DAC and not be too smart here?
 def safeFileRead(path: str, ext: str = ".ltm") ->str:
     """Safely include other ltm files"""
@@ -279,6 +282,15 @@ class Dot:
 
         print(graph.dot(compoundLinks=True))
 
+    # Write this dotfile to disk 
+    def write(self, filePath, compoundLinks=False):
+        with open(filePath.replace('\\', '/'), 'w') as f:
+            f.write(self.dot(compoundLinks=compoundLinks))
+
+    # Render a graph image from this dot, and save it to disk
+    def render(self, filepath, compoundLinks=False):
+        gv = graphviz.Source(self.dot(compoundLinks=compoundLinks))
+        gv.render(filename=filepath)
 
 # XXX: Remove
 if __name__ == "__main__":
