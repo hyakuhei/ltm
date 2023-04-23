@@ -1,6 +1,10 @@
 import json, subprocess, sys
 
+# We use our own code for building the Dot expression of the LTM code
 from util import search, Dot
+
+# We use the graphviz library to call the Dot image renderes without needing to call to subprocess
+import graphviz
 
 # XXX: This is ugly
 ARCH = "High Level Architecture"
@@ -117,7 +121,7 @@ def prepDoc(doc):
 
 
 def main(
-    generateArchDiagram=True, markdown=False, printLabels=False, linkCounters=True
+    generateArchDiagram=True, markdown=False, printLabels=False, linkCounters=True, singleScene=False
 ):
     doc = json.loads(sys.stdin.read())
     doc = prepDoc(doc)
@@ -132,18 +136,14 @@ def main(
             graph = genGraph(
                 doc, sceneName, linkCounters=linkCounters, printLabels=printLabels
             )
+            
+            fileName = f"output/{sceneName}.dot"
+            if sceneName == ARCH:
+                graph.write(fileName, compoundLinks=True)
+            else:
+                graph.write(fileName)
 
-            fileName = f"output/{sceneName}"
-            with open(f"{fileName}.dot", "w") as f:
-                if sceneName == ARCH:
-                    f.write(graph.dot(compoundLinks=True))
-                else:
-                    f.write(graph.dot())
-
-            _ = subprocess.run(
-                ["dot", "-s100", "-Tpng", f"{fileName}.dot", f"-o{fileName}.png"],
-                shell=False,
-            )
+            graphviz.render('dot', 'png', fileName).replace('\\', '/')
 
             if markdown:
                 print(f"## {sceneName}")
@@ -183,6 +183,7 @@ if __name__ == "__main__":
         Generate architecture diagrams and markdown reports from JSON files
 
         -h \t\t Print this help
+        -single \t\t Generate a diagram for a single scene - if given multiple scenes only the first one will be generated.
         -arch \t\t Generate a summary high level architeciture diagram from the supplied scenes
         -markdown \t Generate Markdown output that inlcudes generated diagrams
         -label \t\t Include data strings in edge labels
@@ -201,6 +202,18 @@ if __name__ == "__main__":
     
     if "-number" in sys.argv:
         parms["linkCounters"] = True 
+
+    if "-single" in sys.argv:
+        parms["singleScene"] = True
+        if "generateArchDiagram" in parms:
+            print("Error: Cannot use '-arch' and '-single' in the same command")
+            sys.exit(-1)
+        if "markdown" in parms:
+            print("Error: Cannot use '-markdown' and '-single' in the same command")
+            sys.exit(-1)
+        if "printLabels" in parms:
+            print("Error: Cannot use '-label' and '-single' in the same command")
+            sys.exit(-1)
     
     main(**parms)
 

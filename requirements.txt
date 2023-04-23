@@ -1,10 +1,12 @@
+-e git+ssh://git@github.com/hyakuhei/attackTrees.git@aeb3ef70d6eb38cddd6a46cd179e4b29530024f8#egg=attacktree
 black==21.12b0
 click==8.0.3
 deepdiff==5.7.0
+graphviz==0.20.1
 lark==1.0.0
 mypy-extensions==0.4.3
 ordered-set==4.0.2
 pathspec==0.9.0
 platformdirs==2.4.0
 tomli==1.2.3
-typing-extensions==4.0.1
+typing_extensions==4.0.1
