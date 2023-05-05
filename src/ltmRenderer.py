@@ -1,10 +1,9 @@
-import json, subprocess, sys
+import io
 
-# We use our own code for building the Dot expression of the LTM code
 from util import search, Dot
 
-# We use the graphviz library to call the Dot image renderes without needing to call to subprocess
 import graphviz
+
 
 # XXX: This is ugly
 ARCH = "High Level Architecture"
@@ -18,7 +17,7 @@ def drawRecursiveBoundaries(doc, boundaryKey, graph, drawnBoundaries=None):
 
 
 # TODO: Smartlinks
-def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True, printLabels=True):
+def genGraph(doc, sceneName, compoundLinks=False, number=True, label=True):
 
     sceneToDraw = None
     for sceneDict in doc["scenes"]:
@@ -71,10 +70,10 @@ def genGraph(doc, sceneName, compoundLinks=False, linkCounters=True, printLabels
         linkCounter += 1
 
         flowLabel = ""
-        if linkCounters == True:
+        if number == True:
             flowLabel = f"{linkCounter}."
 
-        if printLabels == True:
+        if label == True:
             flowLabel = flowLabel + flow["data"]
 
         link = graph.newLink(
@@ -120,12 +119,21 @@ def prepDoc(doc):
     return doc
 
 
-def main(
-    generateArchDiagram=True, markdown=False, printLabels=False, linkCounters=True, singleScene=False
+def render(
+    doc,
+    outputDir,
+    generateArchDiagram=True,
+    report=False,
+    label=False,
+    number=True,
+    title="High Level Architecture",
 ):
-    doc = json.loads(sys.stdin.read())
     doc = prepDoc(doc)
     graph = None
+
+    report_fd = None
+    if report == True:
+        report_fd = open(f"{outputDir}/report.md", "w")
 
     scenes = doc["scenes"]
     if generateArchDiagram == True:  # TODO: Make this a command line argument
@@ -133,88 +141,40 @@ def main(
 
     for scene in doc["scenes"]:
         for sceneName in scene.keys():
-            graph = genGraph(
-                doc, sceneName, linkCounters=linkCounters, printLabels=printLabels
-            )
-            
-            fileName = f"output/{sceneName}.dot"
-            if sceneName == ARCH:
+            graph = genGraph(doc, sceneName, number=number, label=label)
+
+            fileName = f"{outputDir}/{sceneName}"
+            if sceneName == title:
                 graph.write(fileName, compoundLinks=True)
             else:
                 graph.write(fileName)
 
-            graphviz.render('dot', 'png', fileName).replace('\\', '/')
+            graphviz.render("dot", "png", fileName).replace("\\", "/")
 
-            if markdown:
-                print(f"## {sceneName}")
-                print(f"![{sceneName}]({fileName.replace(' ', '%20')}.png)")
-                if sceneName == ARCH and generateArchDiagram == True:
-                    print("\n| Actor | Description |")
-                    print("| --- | ---- |")
+            if report:
+                report_fd.write(f"## {sceneName}\n")
+                report_fd.write(
+                    f"![{sceneName}]({sceneName.replace(' ', '%20')}.png)\n"
+                )
+                if sceneName == title and generateArchDiagram == True:
+                    report_fd.write("\n| Actor | Description |\n")
+                    report_fd.write("| --- | ---- |\n")
                     for actor in doc["actors"].keys():
-                        print(f"| {actor} | {doc['actors'][actor]['description'] if 'description' in doc['actors'][actor] else '-'} |")
-                    print("\n")
+                        report_fd.write(
+                            f"| {actor} | {doc['actors'][actor]['description'] if 'description' in doc['actors'][actor] else '-'} |\n"
+                        )
+                    report_fd.write("\n\n")
 
-                if sceneName != ARCH:
-                    print("\n| Id | From | To | Data |")
-                    print("| --- | ---- | --- | ---- |")
+                if sceneName != title:
+                    report_fd.write("\n| Id | From | To | Data |\n")
+                    report_fd.write("| --- | ---- | --- | ---- |\n")
                     ctr = 1
                     for flow in scene[sceneName]:
-                        print(
-                            f"| {ctr} | {flow['from']} | {flow['to']} | {flow['data']} |"
+                        report_fd.write(
+                            f"| {ctr} | {flow['from']} | {flow['to']} | {flow['data']} |\n"
                         )
                         ctr += 1
-                    print("\n")
+                    report_fd.write("\n")
 
-                
-
-if __name__ == "__main__":
-    # TODO argument handling
-
-    parms = {
-        "generateArchDiagram": False,
-        "markdown": False,
-        "printLabels": False,
-        "linkCounters": False,
-    }
-
-    if "-h" in sys.argv or "--help" in sys.argv:
-        print("""
-        Generate architecture diagrams and markdown reports from JSON files
-
-        -h \t\t Print this help
-        -single \t\t Generate a diagram for a single scene - if given multiple scenes only the first one will be generated.
-        -arch \t\t Generate a summary high level architeciture diagram from the supplied scenes
-        -markdown \t Generate Markdown output that inlcudes generated diagrams
-        -label \t\t Include data strings in edge labels
-        -number \t Number each dataflow
-        """)
-        sys.exit(0)
-
-    if "-arch" in sys.argv:
-        parms["generateArchDiagram"] = True
-    
-    if "-markdown" in sys.argv:
-        parms["markdown"] = True
-    
-    if "-label" in sys.argv:
-        parms["printLabels"] = True
-    
-    if "-number" in sys.argv:
-        parms["linkCounters"] = True 
-
-    if "-single" in sys.argv:
-        parms["singleScene"] = True
-        if "generateArchDiagram" in parms:
-            print("Error: Cannot use '-arch' and '-single' in the same command")
-            sys.exit(-1)
-        if "markdown" in parms:
-            print("Error: Cannot use '-markdown' and '-single' in the same command")
-            sys.exit(-1)
-        if "printLabels" in parms:
-            print("Error: Cannot use '-label' and '-single' in the same command")
-            sys.exit(-1)
-    
-    main(**parms)
-
-    
+    if report_fd is not None:
+        report_fd.close()

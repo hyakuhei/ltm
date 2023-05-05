@@ -6,23 +6,22 @@
 
 from typing import Union
 
-#Use the graphviz library to do the actual image rendering only.
-import graphviz 
+# Use the graphviz library to do the actual image rendering only.
+import graphviz
 
 # Should we just rely on Posix DAC and not be too smart here?
-def safeFileRead(path: str, ext: str = ".ltm") ->str:
+def safeFileRead(path: str, ext: str = ".ltm") -> str:
     """Safely include other ltm files"""
     # Files must end in .ltm
     # Files must be local (no windering off into /etc/ ...)
-    #TODO: Think more about this, it'll do for now though.
+    # TODO: Think more about this, it'll do for now though.
     path = path.strip()
     if not path.endswith(ext):
         print("Invalid include")
         return ""
 
-    with open(path, 'r') as f:
+    with open(path, "r") as f:
         return f.read()
-    
 
 
 def search(parent: dict, searchValue, path: list = None):
@@ -282,15 +281,16 @@ class Dot:
 
         print(graph.dot(compoundLinks=True))
 
-    # Write this dotfile to disk 
+    # Write this dotfile to disk
     def write(self, filePath, compoundLinks=False):
-        with open(filePath.replace('\\', '/'), 'w') as f:
+        with open(filePath.replace("\\", "/"), "w") as f:
             f.write(self.dot(compoundLinks=compoundLinks))
 
     # Render a graph image from this dot, and save it to disk
     def render(self, filepath, compoundLinks=False):
         gv = graphviz.Source(self.dot(compoundLinks=compoundLinks))
         gv.render(filename=filepath)
+
 
 # XXX: Remove
 if __name__ == "__main__":

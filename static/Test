@@ -1,0 +1,12 @@
+digraph G {
+compound=true;
+rankdir="LR";
+    subgraph cluster1 {
+    rankdir="TB";
+    label="Test";
+    color="Black";
+        node2 [label="server" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+        node3 [label="client" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+    }
+node3->node2 [label="" fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
+}
