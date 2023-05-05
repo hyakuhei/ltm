@@ -1,0 +1,20 @@
+digraph G {
+compound=true;
+rankdir="LR";
+    subgraph cluster1 {
+    rankdir="TB";
+    label="User renders diagrams";
+    color="Black";
+        node2 [label="shell" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+        node3 [label="user" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+        node4 [label="python" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+        node5 [label="filesystem" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+        node6 [label="dot" shape="box", margin="0.1", color="Grey", fontsize="13", fontname="Helvetica"];
+    }
+node3->node2 [label="" fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
+node2->node4 [label="" fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
+node4->node4 [label="" fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
+node4->node5 [label="" fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
+node4->node6 [label="" fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
+node6->node5 [label="" fontsize="13", penwidth="1.2", arrowsize="0.8", fontname="Helvetica"];
+}
