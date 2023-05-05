@@ -47,16 +47,20 @@ grammar = """
     %ignore C_COMMENT
 """
 
+# Python std lib
 import json
 import logging
 import sys
+import argparse
 
+# Project libs
+import util
+
+# External Imports
 from deepdiff import DeepDiff
-
 from lark import Lark
 from lark.visitors import Visitor_Recursive
 
-import util
 
 parser = Lark(grammar)
 
@@ -102,7 +106,7 @@ class MyVisitor(Visitor_Recursive):
 
     def describe(self, tree):
         """Visitor Function"""
-        #print(f"Visited {tree}")
+        # print(f"Visited {tree}")
 
         describedActor = None
 
@@ -116,7 +120,7 @@ class MyVisitor(Visitor_Recursive):
                 describedActor = doc["actors"][str(child)]
             if child.type == "ESCAPED_STRING":
                 assert describedActor is not None
-                describedActor['description'] = str(child).strip('"\\')
+                describedActor["description"] = str(child).strip('"\\')
 
     def dataflow(self, tree):
         flow = {}
@@ -260,7 +264,7 @@ def main():
             preparse.append(util.safeFileRead(path))
         else:
             preparse.append(s)
-    
+
     preParsedString = "".join(preparse)
 
     parseTree = parser.parse(preParsedString)
@@ -268,6 +272,51 @@ def main():
     print(json.dumps(doc, indent=4, sort_keys=True), end="")
 
 
+def new_main():
+    # Accept either STDIN or File pointer
+    # python ltm.py -in file.ltm -outdir ~/output
+    # cat model.ltm | python ltm.py -outdir ~/output
+
+    parser = argparse.ArgumentParser(
+        prog="ltm.py", description="Lightweight Transactional Modeller"
+    )
+    parser.add_argument(
+        "-i",
+        "--infile",
+        help="Input LTM file, STDIN will be used if infile not provided",
+    )
+    parser.add_argument(
+        "-o",
+        "--outdir",
+        required=True,
+        help="Output directory for images, dotfiles and markdown files",
+    )
+    parser.add_argument(
+        "-arch",
+        action="store_true",
+        help="Generate summary architecture from individual transactions",
+    )
+    parser.add_argument(
+        "-markdown",
+        action="store_true",
+        help="Generate a markdown report that contains all the images",
+    )
+    parser.add_argument(
+        "-label",
+        action="store_true",
+        help="Print strings on individual arrows in diagrams",
+    )
+    parser.add_argument(
+        "-number", action="store_true", help="Use labels that refer to labels"
+    )
+
+    args = parser.parse_args()
+    print(args.infile)
+    print(args.outdir)
+
+    sys.exit(0)
+
+
 if __name__ == "__main__":
     # test()
-    main()
+    new_main()
