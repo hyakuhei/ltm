@@ -73,6 +73,7 @@ _sceneMap = {}
 # This section of code deals with parsing the LTM file and constructing a JSON representation of the architecture
 ##
 
+
 class MyVisitor(Visitor_Recursive):
     # This has to be run top-down.
     def _addActor(self, tree):
@@ -258,10 +259,12 @@ def test():
             else:
                 print(diff)
 
+
 # Read LTM from an open FD
 # Respond with a dict representation of an architecture
 
-def parseLTM(fd=None , closeFD=True):
+
+def parseLTM(fd=None, closeFD=True):
     assert fd is not None
 
     preparse = []
@@ -274,11 +277,11 @@ def parseLTM(fd=None , closeFD=True):
 
     if closeFD:
         fd.close()
-    
+
     preParsedString = "".join(preparse)
 
     parseTree = parser.parse(preParsedString)
     MyVisitor().visit_topdown(parseTree)
-    #print(json.dumps(doc, indent=4, sort_keys=True), end="")
+    # print(json.dumps(doc, indent=4, sort_keys=True), end="")
 
     return doc

@@ -126,14 +126,14 @@ def render(
     report=False,
     label=False,
     number=True,
-    title="High Level Architecture"
+    title="High Level Architecture",
 ):
     doc = prepDoc(doc)
     graph = None
 
     report_fd = None
     if report == True:
-        report_fd = open(f"{outputDir}/report.md", 'w')
+        report_fd = open(f"{outputDir}/report.md", "w")
 
     scenes = doc["scenes"]
     if generateArchDiagram == True:  # TODO: Make this a command line argument
@@ -141,9 +141,7 @@ def render(
 
     for scene in doc["scenes"]:
         for sceneName in scene.keys():
-            graph = genGraph(
-                doc, sceneName, number=number, label=label
-            )
+            graph = genGraph(doc, sceneName, number=number, label=label)
 
             fileName = f"{outputDir}/{sceneName}"
             if sceneName == title:
@@ -155,7 +153,9 @@ def render(
 
             if report:
                 report_fd.write(f"## {sceneName}\n")
-                report_fd.write(f"![{sceneName}]({sceneName.replace(' ', '%20')}.png)\n")
+                report_fd.write(
+                    f"![{sceneName}]({sceneName.replace(' ', '%20')}.png)\n"
+                )
                 if sceneName == title and generateArchDiagram == True:
                     report_fd.write("\n| Actor | Description |\n")
                     report_fd.write("| --- | ---- |\n")
@@ -175,6 +175,6 @@ def render(
                         )
                         ctr += 1
                     report_fd.write("\n")
-                
+
     if report_fd is not None:
         report_fd.close()

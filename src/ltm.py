@@ -4,6 +4,7 @@ import argparse, sys, os, json
 from ltmParser import parseLTM
 from ltmRenderer import render
 
+
 def main():
     # Accept either STDIN or File pointer
     # python ltm.py -in file.ltm -outdir ~/output
@@ -24,21 +25,23 @@ def main():
         help="Output directory for images, dotfiles and markdown files",
     )
     argparser.add_argument(
-        "-a", "--arch",
+        "-a",
+        "--arch",
         action="store_true",
         help="Generate summary architecture from individual transactions",
     )
     argparser.add_argument(
-        "-r", "--report",
+        "-r",
+        "--report",
         action="store_true",
-        help="Generate a markdown report that contains all the images",
+        help="Generate a markdown report that contains all the images (OUTDIR/report.md)",
     )
     argparser.add_argument(
-        "--title",
-        help="Provide a title for the architecture report"
+        "--title", help="Provide a title for the architecture report"
     )
     argparser.add_argument(
-        "-l", "--label",
+        "-l",
+        "--label",
         action="store_true",
         help="Print strings on individual arrows in diagrams",
     )
@@ -49,28 +52,30 @@ def main():
         "-m",
         "--model",
         action="store_true",
-        help="Write the JSON model to the output dir (model.json)"
+        help="Write the JSON model to the output dir (OUTDIR/model.json)",
     )
 
     args = argparser.parse_args()
 
     if not os.path.exists(args.outdir):
-        print("Error: Please provide a valid path for -o/--outdir. Did you forget to create it?")
+        print(
+            "Error: Please provide a valid path for -o/--outdir. Did you forget to create it?"
+        )
         sys.exit(-1)
 
     fd = None
     if args.infile is not None:
-        fd = open(args.infile, 'r')
+        fd = open(args.infile, "r")
     else:
         fd = sys.stdin
 
     doc = parseLTM(fd)
 
     if args.model:
-        with open(f"{args.outdir}/model.json",'w') as fd:
+        with open(f"{args.outdir}/model.json", "w") as fd:
             fd.write(json.dumps(doc, indent=4, sort_keys=True))
 
-    #print(json.dumps(doc, indent=4, sort_keys=True), end="")
+    # print(json.dumps(doc, indent=4, sort_keys=True), end="")
 
     ## These were the original rendering parameters for jtg.py
     parms = {
@@ -80,7 +85,7 @@ def main():
         "number": args.number,
     }
 
-    render(doc,args.outdir,**parms)
+    render(doc, args.outdir, **parms)
 
 
 if __name__ == "__main__":
