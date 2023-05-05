@@ -66,9 +66,9 @@ Boundaries can be declared before, or after scenes.
 
 ```
 scene: "User renders diagrams"
-user shell: "cat out.json | python3 jtg.py"
-shell python: "load jtg.py"
-python python: "Parse json and generate .dot and .png"
+user shell: "python3 src/ltm.py -i model.ltm -o output"
+shell python: "load src/ltm.py"
+python python: "Parse ltm file, create json representation"
 python filesystem: "Write .dot files"
 python dot: "Call dot to generate .png files"
 dot filesystem: "Write .png"
