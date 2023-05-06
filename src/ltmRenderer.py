@@ -145,11 +145,11 @@ def render(
 
             fileName = f"{outputDir}/{sceneName}"
             if sceneName == title:
-                graph.write(fileName, compoundLinks=True)
+                graph.write(f"{fileName}.dot", compoundLinks=True)
             else:
-                graph.write(fileName)
+                graph.write(f"{fileName}.dot")
 
-            graphviz.render("dot", "png", fileName).replace("\\", "/")
+            graphviz.render("dot", "png", f"{fileName}.dot").replace("\\", "/")
 
             if report:
                 report_fd.write(f"## {sceneName}\n")

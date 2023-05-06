@@ -72,6 +72,8 @@ python python: "Parse ltm file, create json representation"
 python filesystem: "Write .dot files"
 python dot: "Call dot to generate .png files"
 dot filesystem: "Write .png"
+
+boundary "Posix": shell filesystem
 ```
 
 ### Another example
