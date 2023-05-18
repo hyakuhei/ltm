@@ -127,6 +127,7 @@ def render(
     label=False,
     number=True,
     title="High Level Architecture",
+    fileNameOverride=None
 ):
     doc = prepDoc(doc)
     graph = None
@@ -144,6 +145,9 @@ def render(
             graph = genGraph(doc, sceneName, number=number, label=label)
 
             fileName = f"{outputDir}/{sceneName}"
+            if fileNameOverride is not None:
+                fileName = f"{outputDir}/{fileNameOverride}"
+
             if sceneName == title:
                 graph.write(f"{fileName}.dot", compoundLinks=True)
             else:
@@ -154,7 +158,7 @@ def render(
             if report:
                 report_fd.write(f"## {sceneName}\n")
                 report_fd.write(
-                    f"![{sceneName}]({sceneName.replace(' ', '%20')}.png)\n"
+                    f"![{sceneName}]({sceneName.replace(' ', '%20')}.dot.png)\n"
                 )
                 if sceneName == title and generateArchDiagram == True:
                     report_fd.write("\n| Actor | Description |\n")
