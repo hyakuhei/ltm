@@ -58,6 +58,11 @@ def main():
         "--single",
         help="Single Diagram Mode - provide a single filename to write a diagram to - only prints the first scene (really only used for Obsidian)",
     )
+    argparser.add_argument(
+        "--html",
+        action="store_true",
+        help="Print an HTML table for a single scene",
+    )
 
     args = argparser.parse_args()
 
@@ -87,7 +92,9 @@ def main():
         "report": args.report,
         "label": args.label,
         "number": args.number,
-        "fileNameOverride": args.single
+        "fileNameOverride": args.single,
+        "singleMode":True if args.single else False,
+        "printSingleModeHtml": args.html
     }
 
     render(doc, args.outdir, **parms)
