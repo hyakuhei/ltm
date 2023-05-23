@@ -1,4 +1,4 @@
-import io
+import io, sys, os
 
 from util import search, Dot
 
@@ -127,6 +127,9 @@ def render(
     label=False,
     number=True,
     title="High Level Architecture",
+    singleMode=False,
+    fileNameOverride=None,
+    printSingleModeHtml=False
 ):
     doc = prepDoc(doc)
     graph = None
@@ -139,23 +142,37 @@ def render(
     if generateArchDiagram == True:  # TODO: Make this a command line argument
         doc = addArchScene(doc)  # adds an ARCH scene to the doc
 
+    ctr = 0
     for scene in doc["scenes"]:
+        ctr += 1
+        if singleMode is True and ctr > 1:
+            break
         for sceneName in scene.keys():
             graph = genGraph(doc, sceneName, number=number, label=label)
 
             fileName = f"{outputDir}/{sceneName}"
+            if fileNameOverride is not None:
+                fileName = f"{outputDir}/{fileNameOverride}"
+
             if sceneName == title:
                 graph.write(f"{fileName}.dot", compoundLinks=True)
             else:
                 graph.write(f"{fileName}.dot")
 
+
+            ##XXX Temporary path bypass
+            os.environ["PATH"] = os.environ["PATH"] + ":/opt/homebrew/bin/"
+
             graphviz.render("dot", "png", f"{fileName}.dot").replace("\\", "/")
 
             if report:
-                report_fd.write(f"## {sceneName}\n")
-                report_fd.write(
-                    f"![{sceneName}]({sceneName.replace(' ', '%20')}.png)\n"
-                )
+                if singleMode == True:
+                    pass
+                else:                    
+                    report_fd.write(f"## {sceneName}\n")
+                    report_fd.write(
+                        f"![{sceneName}]({sceneName.replace(' ', '%20')}.dot.png)\n"
+                    )
                 if sceneName == title and generateArchDiagram == True:
                     report_fd.write("\n| Actor | Description |\n")
                     report_fd.write("| --- | ---- |\n")
@@ -175,6 +192,16 @@ def render(
                         )
                         ctr += 1
                     report_fd.write("\n")
+
+                    if printSingleModeHtml == True:
+                        print("<table>")
+                        print("<tr><td>Id</td><td>From</td><td>To</td><td>Data</td></tr>")
+                        
+                        ctr = 1
+                        for flow in scene[sceneName]:
+                            print(f"<tr><td>{ctr}</td><td>{flow['from']}</td><td>{flow['to']}</td><td>{flow['data']}</td></tr>")
+                            ctr += 1
+                        print("</table>")
 
     if report_fd is not None:
         report_fd.close()
